@@ -4,6 +4,8 @@ import platform
 import json
 import datetime
 
+import metAgenda
+
 # Virus Total i logs
 VIRUSTOTAL_API_KEY = '964ff6a97060a4512bf3a8047f09964b5a0b6f53055ce5e540e130eb09204b4b'  # api virus total
 LOGS_ENABLED = False
@@ -60,9 +62,9 @@ def imprimir_banner():
     █▄▄▄▄▄  █   ▄   █      █ █▄█   █  █▄█  █       █  ▄   ██▄     ▄█ █   █ █    ▄▄▄█
      ▄▄▄▄▄█ █  █ █  █  ▄   █       █       █   ▄   █ █▄█   █ █   █   █   █ █   █▄▄▄ 
     █▄▄▄▄▄▄▄█▄▄█ █▄▄█▄█ █▄▄█▄▄▄▄▄▄██▄▄▄▄▄▄▄█▄▄█ █▄▄█▄▄▄▄▄▄▄█ █▄▄▄█   █▄▄▄█ █▄▄▄▄▄▄▄█
-
     """
     print(f"{Colors.RED}{banner}{Colors.RESET}")
+
 
 # menu
 def mostra_menu():
@@ -89,7 +91,7 @@ def log_moviment(missatge):
                 cargar_configuracion()
                 return
 
-        arxiu_log = os.path.join(LOGS_FOLDER, f"{datetime.datetime.now().strftime('%Y-%m-%d-%H-%M-%S')}.log")
+        arxiu_log = os.path.join(LOGS_FOLDER, f"{datetime.datetime.now().strftime('%Y%m%d%H%M%S')}.log")
         with open(arxiu_log, 'a') as log_file:
             log_file.write(f"{datetime.datetime.now()} - {missatge}\n")
 
@@ -235,40 +237,50 @@ def main():
         exit
 
     while True:
-        mostra_menu()
+        etMenu1 = ["Mostrar llista de fitxers en directori 1",
+                    "Mostrar llista de fitxers en directori 2",
+                    "Comparar fitxers en ambdós directoris",
+                    "Comparar fitxer específic",
+                    "Penjar un fitxer a VirusTotal i verificar malware",
+                    "Canviar directoris",
+                    "Configuració",
+                    "Sortir"]
 
-        opcio = input(f"\nSelecciona una opció ({Colors.RED}1-8{Colors.RESET}): ")
+        opcioEscollida = metAgenda.obteOpcio(etMenu1,"Selecciona una opció:  ")
+        
+    
+        # mostra_menu()
 
-        if opcio == "1":
+        if opcioEscollida == "Mostrar llista de fitxers en directori 1":
             llista_fitxers_directori(directori1)
             log_moviment(f"S'ha mostrat la llista de fitxers del directori: {directori1}")
-        elif opcio == "2":
+        elif opcioEscollida == "Mostrar llista de fitxers en directori 2":
             llista_fitxers_directori(directori2)
             log_moviment(f"S'ha mostrat la llista de fitxers del directori: {directori2}")
-        elif opcio == "3":
+        elif opcioEscollida == "Comparar fitxers en ambdós directoris":
             compara_fitxers(directori1, directori2)
             log_moviment("S'ha comparat la llista de fitxers en ambdós directoris.")
-        elif opcio == "4":
+        elif opcioEscollida == "Comparar fitxer específic":
             nom_fitxer = input(f"{Colors.RED}Introdueix el nom del fitxer a comparar: {Colors.RESET}")
             compara_fitxer(directori1, directori2, nom_fitxer)
             log_moviment(f"S'ha comparat el fitxer: {nom_fitxer}")
-        elif opcio == "5":
+        elif opcioEscollida == "Penjar un fitxer a VirusTotal i verificar malware":
             nom_fitxer = input(f"{Colors.RED}Introdueix el nom del fitxer a penjar a VirusTotal: {Colors.RESET}")
             penja_a_virustotal(nom_fitxer)
             log_moviment(f"S'ha penjat el fitxer a VirusTotal: {nom_fitxer}")
-        elif opcio == "6":
+        elif opcioEscollida == "Canviar directoris":
             canviar_directoris()
             log_moviment("S'han canviat els directoris.")
-        elif opcio == "7":
+        elif opcioEscollida == "Configuració":
             mostrar_configuracion()
             configurar_programa()
-        elif opcio == "8":
+        elif opcioEscollida == "Sortir":
             print("Sortint de l'aplicació. Bye :)")
             log_moviment("S'ha tancat l'aplicació.")
             break
         else:
             print(f"Opció no vàlida. Si us plau, selecciona una opció correcta.")
-            log_moviment(f"S'ha introduït una opció no vàlida: {opcio}")
+            log_moviment(f"S'ha introduït una opció no vàlida: {opcioEscollida}")
 
 if __name__ == "__main__":
     esborraPantalla()
