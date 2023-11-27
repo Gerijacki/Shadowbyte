@@ -34,7 +34,6 @@ Directory comperator and more....
       ```
       git clone https://github.com/Gerijacki/dic-compare.git
       ```
-      ```
       Launch the app:
       ```
       python dic-compare.py
