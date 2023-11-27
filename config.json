@@ -1,0 +1,5 @@
+{
+  "virustotal_api_key": "964ff6a97060a4512bf3a8047f09964b5a0b6f53055ce5e540e130eb09204b4b",
+  "logs_enabled": true,
+  "logs_folder": "./logs"
+}
