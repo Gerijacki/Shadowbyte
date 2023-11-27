@@ -30,11 +30,11 @@ Directory comperator and more....
       4. Run the `shadowbyte` executable.
 
     - **From Source:**
-      Clone the repository:
+      1. Clone the repository:
       ```
       git clone https://github.com/Gerijacki/dic-compare.git
       ```
-      Launch the app:
+      2. Launch the app:
       ```
       python dic-compare.py
       ```
