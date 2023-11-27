@@ -4,13 +4,7 @@ import platform
 import json
 import datetime
 
-import metAgenda;
-
-
-
-
-
-
+import metAgenda
 
 # Virus Total i logs
 VIRUSTOTAL_API_KEY = '964ff6a97060a4512bf3a8047f09964b5a0b6f53055ce5e540e130eb09204b4b'  # api virus total
