@@ -2,6 +2,7 @@ import os
 import requests
 import platform
 import json
+import filecmp
 import datetime
 
 # Virus Total i logs
@@ -131,27 +132,61 @@ def llista_fitxers_directori(directori):
             print(f"\nFitxers en {Colors.RED}{directori}{Colors.RESET}:")
             for fitxer in llista_fitxers:
                 ruta_fitxer = os.path.join(directori, fitxer)
-                tamany_mb = os.path.getsize(ruta_fitxer) / (1024 * 1024)  # Tamany en megabytes
-                tipus_fitxer = "Fitxer" if os.path.isfile(ruta_fitxer) else "Directori"
-                print(f"- {Colors.MAGENTA}{fitxer}{Colors.RESET} ({tamany_mb:.2f} MB, {Colors.CYAN}{tipus_fitxer}{Colors.RESET})")
+                
+                if os.path.isfile(ruta_fitxer):
+                    # Si és un fitxer
+                    tamany_kb = os.path.getsize(ruta_fitxer) / 1024  # Convertir a kilobytes
+                    print(f"- {Colors.MAGENTA}{fitxer}{Colors.RESET} ({tamany_kb:.2f} KB, {Colors.CYAN}Fitxer{Colors.RESET})")
+                elif os.path.isdir(ruta_fitxer):
+                    # Si és una carpeta
+                    tamany_contingut = sum(os.path.getsize(os.path.join(ruta_fitxer, f)) for f in os.listdir(ruta_fitxer) if os.path.isfile(os.path.join(ruta_fitxer, f)))
+                    tamany_contingut_kb = tamany_contingut / 1024  # Convertir a kilobytes
+                    print(f"- {Colors.MAGENTA}{fitxer}{Colors.RESET} ({tamany_contingut_kb:.2f} KB, {Colors.CYAN}Directori{Colors.RESET})")
+                else:
+                    print(f"- {Colors.MAGENTA}{fitxer}{Colors.RESET} ({Colors.CYAN}Desconegut{Colors.RESET})")
         except FileNotFoundError:
             print(f"\n{Colors.YELLOW}Error: El directori {directori} no existeix.{Colors.RESET}")
     else:
         print(f"\n{Colors.YELLOW}Error: El directori {directori} no existeix.{Colors.RESET}")
 
+
 # comprarar arx
 def compara_fitxers(directori1, directori2):
     if os.path.exists(directori1) and os.path.exists(directori2):
-        llista1 = set(os.listdir(directori1))
-        llista2 = set(os.listdir(directori2))
+        llista1 = os.listdir(directori1)
+        llista2 = os.listdir(directori2)
 
-        fitxers_comuns = llista1.intersection(llista2)
+        fitxers_diferents = []
+        fitxers_iguals = []
 
-        print(f"\nFitxers comuns en ambdós directoris:")
-        for fitxer in fitxers_comuns:
+        for fitxer in llista1:
+            path1 = os.path.join(directori1, fitxer)
+            path2 = os.path.join(directori2, fitxer)
+
+            if fitxer in llista2:
+                # El fitxer està a ambdós directoris, comparar contingut
+                if filecmp.cmp(path1, path2):
+                    fitxers_iguals.append(fitxer)
+                else:
+                    fitxers_diferents.append(fitxer)
+            else:
+                fitxers_diferents.append(fitxer)
+
+        for fitxer in set(llista2) - set(llista1):
+            # Afegir els fitxers que només estan a directori2
+            fitxers_diferents.append(fitxer)
+
+        print(f"\nFitxers diferents en ambdós directoris:")
+        for fitxer in fitxers_diferents:
             print(f"- {Colors.MAGENTA}{fitxer}{Colors.RESET}")
+
+        print(f"\nFitxers iguals en ambdós directoris:")
+        for fitxer in fitxers_iguals:
+            print(f"- {Colors.MAGENTA}{fitxer}{Colors.RESET}")
+
     else:
         print(f"\n{Colors.YELLOW}Error: Un dels directoris no existeix.{Colors.RESET}")
+
 
 # comparar
 def compara_fitxer(directori1, directori2, nom_fitxer):
@@ -180,7 +215,7 @@ def penja_a_virustotal(nom_fitxer):
             files = {'file': (nom_fitxer, file)}
             response = requests.post(url, files=files, params=params)
             
-            # Verificar el código de respuesta HTTP
+            # resposta HTTP
             if response.status_code == 200:
                 result = response.json()
                 print(f"\nResultats de VirusTotal:")
