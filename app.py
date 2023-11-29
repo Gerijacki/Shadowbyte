@@ -6,7 +6,7 @@ import filecmp
 import datetime
 
 # Virus Total i logs
-VIRUSTOTAL_API_KEY = '964ff6a97060a4512bf3a8047f09964b5a0b6f53055ce5e540e130eb09204b4b'  # api virus total
+VIRUSTOTAL_API_KEY = ''  # api virus total
 LOGS_ENABLED = False
 LOGS_FOLDER = "./logs"
 
