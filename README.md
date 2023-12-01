@@ -27,7 +27,7 @@ Directory comperator and more....
       1. Go to the [Releases](https://github.com/Gerijacki/dic-compare/releases) page.
       2. Download the latest release for your operating system.
       3. Extract the downloaded ZIP file.
-      4. Run the `shadowbyte` executable.
+      4. Run the `shadowbyte` or `infobyte` executable.
 
     - **From Source:**
       1. Clone the repository:
@@ -37,6 +37,7 @@ Directory comperator and more....
       2. Launch the app:
       ```
       python dic-compare.py
+      python infobyte.py
       ```
 
 2. **Features**
