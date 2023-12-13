@@ -65,19 +65,6 @@ def imprimir_banner():
     """
     print(f"{Colors.RED}{banner}{Colors.RESET}")
 
-# menu
-def mostra_menu():
-    print("\n----- MENU -----")
-    print(f"{Colors.RED}1. Mostrar llista de fitxers en directori 1{Colors.RESET}")
-    print(f"{Colors.RED}2. Mostrar llista de fitxers en directori 2{Colors.RESET}")
-    print(f"{Colors.RED}3. Comparar fitxers en ambdós directoris{Colors.RESET}")
-    print(f"{Colors.RED}4. Comparar fitxer específic{Colors.RESET}")
-    print(f"{Colors.RED}5. Penjar un fitxer a VirusTotal i verificar malware{Colors.RESET}")
-    print(f"{Colors.RED}6. Canviar directoris{Colors.RESET}")
-    print(f"{Colors.RED}7. Configuració{Colors.RESET}")
-    print(f"{Colors.RED}8. Natejar Pantalla:{Colors.RESET}")
-    print(f"{Colors.RED}9. Sortir{Colors.RESET}")
-
 # logs
 def log_moviment(missatge):
     if LOGS_ENABLED:
@@ -191,10 +178,9 @@ def compara_fitxers(directori1, directori2):
     except Exception as e:
         print(f"\n{Colors.YELLOW}Error al comparar fitxers: {e}{Colors.RESET}")
 
-def compara_fitxer(directori1, directori2):
+def compara_fitxer(directori1, directori2, nom_fitxer):
     try:
         log_moviment(f"S'ha comparat el fitxer: {nom_fitxer}")
-        nom_fitxer = input(f"{Colors.RED}Introdueix el nom del fitxer a comparar: {Colors.RESET}")
         path1 = os.path.join(directori1, nom_fitxer)
         path2 = os.path.join(directori2, nom_fitxer)
 
@@ -283,6 +269,19 @@ def config():
     configurar_programa()
 
 
+# menu
+def mostra_menu():
+    print("\n----- MENU -----")
+    print(f"{Colors.RED}1. Mostrar llista de fitxers en directori 1{Colors.RESET}")
+    print(f"{Colors.RED}2. Mostrar llista de fitxers en directori 2{Colors.RESET}")
+    print(f"{Colors.RED}3. Comparar fitxers en ambdós directoris{Colors.RESET}")
+    print(f"{Colors.RED}4. Comparar fitxer específic{Colors.RESET}")
+    print(f"{Colors.RED}5. Penjar un fitxer a VirusTotal i verificar malware{Colors.RESET}")
+    print(f"{Colors.RED}6. Canviar directoris{Colors.RESET}")
+    print(f"{Colors.RED}7. Configuració{Colors.RESET}")
+    print(f"{Colors.RED}8. Sortir{Colors.RESET}")
+
+
 def main():
     cargar_configuracion()
     imprimir_banner()
@@ -312,9 +311,9 @@ def main():
                 1: lambda: llista_fitxers_directori(directori1),
                 2: lambda: llista_fitxers_directori(directori2),
                 3: lambda: compara_fitxers(directori1, directori2),
-                4: lambda: compara_fitxer(directori1, directori2),
-                5: canviar_directoris,
-                6: esborraPantalla,
+                4: lambda: compara_fitxer(directori1, directori2, input(f"{Colors.RED}Introdueix el nom del fitxer a comparar: {Colors.RESET}")),
+                5: lambda: penja_a_virustotal(input(f"{Colors.RED}Introdueix el nom del fitxer a penjar: {Colors.RESET}")),
+                6: canviar_directoris,
                 7: config,
                 8: sortir,
             }

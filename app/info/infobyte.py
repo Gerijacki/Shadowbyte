@@ -23,9 +23,7 @@ def menu():
     print(f"{Colors.RED}3. Información de red{Colors.RESET}")
     print(f"{Colors.RED}4. Información del disco{Colors.RESET}")
     print(f"{Colors.RED}5. Borrar archivos temporales{Colors.RESET}")
-    print(f"{Colors.RED}6. Cambiar directorios{Colors.RESET}")
-    print(f"{Colors.RED}7. Configuración{Colors.RESET}")
-    print(f"{Colors.RED}8. Salir{Colors.RESET}")
+    print(f"{Colors.RED}6. Salir{Colors.RESET}")
 
 def banner():
     banner_text = f"""
@@ -111,8 +109,6 @@ def salir():
     print(f"{Colors.GREEN}Saliendo de la aplicación. ¡Bye! :){Colors.RESET}")
     exit()
 
-
-
 def main():
     banner()
     while True:
@@ -127,7 +123,7 @@ def main():
                 3: red_info,
                 4: disk_info,
                 5: temp_del,
-                8: salir,
+                6: salir,
             }
 
             if opcio in options:
