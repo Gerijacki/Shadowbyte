@@ -22,7 +22,8 @@ def banner_gerijacki():
 {Fore.RED}▄███▄     ▄███▄ ▀██████▄       ▀███████▀  ▄███▄██  ▀██████▀   ▀██████▀   ▀██████▀
 {Fore.CYAN}▀▀▀▀    ▀▀▀▀         ▀▀                      ▀▀▀▀             ▀▀▀▀
 {Style.RESET_ALL}
-{Fore.GREEN}Bienvenido a tu Herramienta Personal en Python. ¡Explora y disfruta de todas las funciones!
+{Fore.GREEN}Benvingut la la meva eina multifunció programmada en python :) 
+Escull un de les segunts opcions per escollir quina eina vols:
 {Style.RESET_ALL}
 """
     print(banner)
@@ -85,6 +86,7 @@ def temp_del():
         print(f"{Colors.YELLOW}Error al borrar archivos temporales: {e}{Colors.RESET}")
 
 def medir_velocidad():
+    # print(f'{Colors.YELLOW}Funció no disponible de moment{Colors.RESET}')
     st = speedtest.Speedtest()
 
     print("Realizando prueba de velocidad...")
@@ -590,10 +592,9 @@ def main_tareas():
 
 
 def main():
+    esborraPantalla()
     banner_gerijacki()
-    print('Benvingut la la meva eina multifunció programmada en python :)')
-    print('Escull un de les segunts opcions per escollir quina eina vols:')
-
+    
     while True:
         menu_gerijacki()
 
