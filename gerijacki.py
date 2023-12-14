@@ -37,7 +37,9 @@ def menu_gerijacki():
     print(f"{Colors.RED}1. Info{Colors.RESET}")
     print(f"{Colors.RED}2. Direct-X{Colors.RESET}")
     print(f"{Colors.RED}3. Task{Colors.RESET}")
-    print(f"{Colors.RED}4. Sortir{Colors.RESET}")
+    print(f"{Colors.RED}4. YT-MP4{Colors.RESET}")
+    print(f"{Colors.RED}5. PASSWD{Colors.RESET}")
+    print(f"{Colors.RED}6. Sortir{Colors.RESET}")
 
 # colors de text
 class Colors:
@@ -611,20 +613,20 @@ def descargar_video(url, carpeta_destino, formato, calidad):
         if stream:
             descarga = stream.download(carpeta_destino)
             print("Descarga completada")
-            print(f"Video guardado en: {descarga}")
+            print(f"{Fore.GREEN}Video guardado en: {descarga}{Style.RESET_ALL}")
             return descarga
         else:
-            print("No se encontró una corriente con el formato y calidad seleccionados.")
+            print(f"{Fore.RED}No se encontró una corriente con el formato y calidad seleccionados.{Style.RESET_ALL}")
     except Exception as e:
-        print(f"Error al descargar el video: {e}")
+        print(f"{Fore.RED}Error al descargar el video: {e}{Style.RESET_ALL}")
 
 def main_yt():
     esborraPantalla()
     banner_yt()
-    url = input("URL del Video: ")
-    carpeta_destino = input("Carpeta de Destino: ")
-    formato = input("Formato del Video (ej. mp4): ")
-    calidad = input("Calidad del Video (ej. 720p): ")
+    url = input(f"{Fore.MAGENTA}URL del Video: {Style.RESET_ALL}")
+    carpeta_destino = input(f"{Fore.MAGENTA}Carpeta de Destino: {Style.RESET_ALL}")
+    formato = input(f"{Fore.MAGENTA}Formato del Video (ej. mp4): {Style.RESET_ALL}")
+    calidad = input(f"{Fore.MAGENTA}Calidad del Video (ej. 720p): {Style.RESET_ALL}")
 
     descargar_video(url, carpeta_destino, formato, calidad)
 # PASSWD
@@ -642,9 +644,9 @@ def main_passwd():
     esborraPantalla()
     banner_yt()
     print(f"{Fore.MAGENTA}Benvingut a la eina de generar contrasenyes segures :){Style.RESET_ALL}")
-    longitud = int(input("Ingrese la longitud de la contraseña: "))
-    incluir_mayusculas = input("¿Incluir mayúsculas? (s/n): ").lower() == 's'
-    incluir_simbolos = input("¿Incluir símbolos? (s/n): ").lower() == 's'
+    longitud = int(input(f"{Fore.YELLOW}Ingrese la longitud de la contraseña: {Style.RESET_ALL}"))
+    incluir_mayusculas = input(f"{Fore.YELLOW}¿Incluir mayúsculas? (s/n): {Style.RESET_ALL}").lower() == 's'
+    incluir_simbolos = input(f"{Fore.YELLOW}¿Incluir símbolos? (s/n): {Style.RESET_ALL}").lower() == 's'
 
     contrasena_generada = generar_contrasena(longitud, incluir_mayusculas, incluir_simbolos)
     print(f"Contraseña generada: {contrasena_generada}")
