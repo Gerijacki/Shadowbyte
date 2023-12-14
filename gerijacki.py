@@ -1,6 +1,9 @@
 # no pain no gain
 import os
+import random
+import string
 import glob
+import pytube
 import speedtest
 import psutil
 import socket
@@ -589,7 +592,62 @@ def main_tareas():
                 print(f"{Fore.RED}Opción no válida. Por favor, selecciona una opción correcta.{Style.RESET_ALL}")
         except ValueError:
             print(f"{Fore.RED}Debes introducir un número válido.{Style.RESET_ALL}")
+# YT
+def banner_yt():
+    print("""
+      _____  _    _  ____  _  _____ _     _     
+     |  __ \| |  | |/ __ \| |/ ____| |   | |    
+     | |__) | |  | | |  | | | |    | |   | |    
+     |  ___/| |  | | |  | | | |    | |   | |    
+     | |    | |__| | |__| | | |____| |___| |____
+     |_|     \____/ \____/|_|\_____|______|______|
+    """)
+    print(f"{Fore.MAGENTA}Benvingut a la eina YT_to_MP4{Style.RESET_ALL}")
 
+def descargar_video(url, carpeta_destino, formato, calidad):
+    try:
+        video = pytube.YouTube(url)
+        stream = video.streams.filter(file_extension=formato, res=calidad).first()
+        if stream:
+            descarga = stream.download(carpeta_destino)
+            print("Descarga completada")
+            print(f"Video guardado en: {descarga}")
+            return descarga
+        else:
+            print("No se encontró una corriente con el formato y calidad seleccionados.")
+    except Exception as e:
+        print(f"Error al descargar el video: {e}")
+
+def main_yt():
+    esborraPantalla()
+    banner_yt()
+    url = input("URL del Video: ")
+    carpeta_destino = input("Carpeta de Destino: ")
+    formato = input("Formato del Video (ej. mp4): ")
+    calidad = input("Calidad del Video (ej. 720p): ")
+
+    descargar_video(url, carpeta_destino, formato, calidad)
+# PASSWD
+def generar_contrasena(longitud=12, incluir_mayusculas=True, incluir_simbolos=True):
+    caracteres = string.ascii_letters + string.digits
+    if incluir_mayusculas:
+        caracteres += string.ascii_uppercase
+    if incluir_simbolos:
+        caracteres += string.punctuation
+    
+    contrasena = ''.join(random.choice(caracteres) for _ in range(longitud))
+    return contrasena
+
+def main_passwd():
+    esborraPantalla()
+    banner_yt()
+    print(f"{Fore.MAGENTA}Benvingut a la eina de generar contrasenyes segures :){Style.RESET_ALL}")
+    longitud = int(input("Ingrese la longitud de la contraseña: "))
+    incluir_mayusculas = input("¿Incluir mayúsculas? (s/n): ").lower() == 's'
+    incluir_simbolos = input("¿Incluir símbolos? (s/n): ").lower() == 's'
+
+    contrasena_generada = generar_contrasena(longitud, incluir_mayusculas, incluir_simbolos)
+    print(f"Contraseña generada: {contrasena_generada}")
 
 def main():
     esborraPantalla()
@@ -605,7 +663,9 @@ def main():
                 1: main_info,
                 2: main_dic,
                 3: main_tareas,
-                4: salir,
+                4: main_yt,
+                5: main_passwd,
+                6: salir,
             }
 
             if opcio in options:
