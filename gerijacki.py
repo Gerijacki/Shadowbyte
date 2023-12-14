@@ -154,7 +154,7 @@ def main_info():
                 3: red_info,
                 4: disk_info,
                 5: temp_del,
-                6: salir,
+                6: main,
             }
 
             if opcio in options:
@@ -467,7 +467,7 @@ def main_dic():
                 5: lambda: penja_a_virustotal(input(f"{Colors.RED}Introdueix el nom del fitxer a penjar: {Colors.RESET}")),
                 6: canviar_directoris,
                 7: config,
-                8: sortir,
+                8: main,
             }
 
             if opcio in options:
@@ -578,7 +578,7 @@ def main_tareas():
                 "1": lambda: mostrar_tareas(tareas),
                 "2": lambda: nueva_tarea(tareas),
                 "3": lambda: status_tarea(tareas),
-                "4": sortir,
+                "4": main,
             }
 
             if opcio in options:
@@ -601,8 +601,8 @@ def main():
             opcio = int(input(f"\nSelecciona una opció: ({Colors.RED}1-8{Colors.RESET}): "))
             
             options = {
-                1: main_dic,
-                2: main_info,
+                1: main_info,
+                2: main_dic,
                 3: main_tareas,
                 4: salir,
             }
