@@ -16,7 +16,7 @@ class Colors:
     MAGENTA = '\033[95m'
     CYAN = '\033[96m'
 
-def menu():
+def menu_infobyte():
     print("\n----- MENU -----")
     print(f"{Colors.RED}1. Speed Test{Colors.RESET}")
     print(f"{Colors.RED}2. Información del sistema{Colors.RESET}")
@@ -25,7 +25,7 @@ def menu():
     print(f"{Colors.RED}5. Borrar archivos temporales{Colors.RESET}")
     print(f"{Colors.RED}6. Salir{Colors.RESET}")
 
-def banner():
+def banner_infobyte():
     banner_text = f"""
     {Colors.CYAN}
     ╔═══╗─────╔╗───╔╗───╔╗
@@ -110,9 +110,9 @@ def salir():
     exit()
 
 def main():
-    banner()
+    banner_infobyte()
     while True:
-        menu()
+        menu_infobyte()
 
         try:
             opcio = int(input(f"\nSelecciona una opción ({Colors.RED}1-8{Colors.RESET}): "))

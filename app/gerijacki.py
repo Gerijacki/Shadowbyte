@@ -1,9 +1,39 @@
+# no pain no gain
 import os
+import glob
+import speedtest
+import psutil
+import socket
+import platform
+import cpuinfo
 import requests
 import platform
 import json
-import filecmp
 import datetime
+import csv
+from colorama import init, Fore, Style, Back
+
+def banner_gerijacki():
+    banner = f"""
+{Fore.MAGENTA} ▄███▄   ████▄██▄   ▄███▄     ▄▄▄▄███▄▄▄▄    ▄██████▄  ▄██████▄   ▄██████▄     ▄██████▄
+{Fore.MAGENTA}██▀  ▀  ██▀  ▀██   ██▀  ▀       ████▀██▀   ███    ███ ██    ███ ██    ███   ██▀  ▀██
+{Fore.RED}▀█▄    ██     ▀█ ██               ██     ▄█████▄  ██    ███ ██    ███  ██    ███
+{Fore.RED}  ▀██  ██▄   ▄█ ██               ██    ██▀  ▀██ ██    ███ ██    ███  ██    ███
+{Fore.RED}▄███▄     ▄███▄ ▀██████▄       ▀███████▀  ▄███▄██  ▀██████▀   ▀██████▀   ▀██████▀
+{Fore.CYAN}▀▀▀▀    ▀▀▀▀         ▀▀                      ▀▀▀▀             ▀▀▀▀
+{Style.RESET_ALL}
+{Fore.GREEN}Bienvenido a tu Herramienta Personal en Python. ¡Explora y disfruta de todas las funciones!
+{Style.RESET_ALL}
+"""
+    print(banner)
+
+# menu
+def menu_gerijacki():
+    print("\n----- MENU -----")
+    print(f"{Colors.RED}1. Info{Colors.RESET}")
+    print(f"{Colors.RED}2. Direct-X{Colors.RESET}")
+    print(f"{Colors.RED}3. Task{Colors.RESET}")
+    print(f"{Colors.RED}4. Sortir{Colors.RESET}")
 
 # colors de text
 class Colors:
@@ -14,13 +44,132 @@ class Colors:
     BLUE = '\033[94m'
     MAGENTA = '\033[95m'
     CYAN = '\033[96m'
+    
+# INFOBYTE
+def menu_infobyte():
+    print("\n----- MENU -----")
+    print(f"{Colors.RED}1. Speed Test{Colors.RESET}")
+    print(f"{Colors.RED}2. Información del sistema{Colors.RESET}")
+    print(f"{Colors.RED}3. Información de red{Colors.RESET}")
+    print(f"{Colors.RED}4. Información del disco{Colors.RESET}")
+    print(f"{Colors.RED}5. Borrar archivos temporales{Colors.RESET}")
+    print(f"{Colors.RED}6. Salir{Colors.RESET}")
 
+def banner_infobyte():
+    banner_text = f"""
+    {Colors.CYAN}
+    ╔═══╗─────╔╗───╔╗───╔╗
+    ║╔══╝─────║║───║║──╔╝╚╗
+    ║╚══╦╗╔╦══╣║╔══╣║╔═╩╗╔╬══╦═╗
+    ║╔══╣║║║╔╗║║║╔═╣║║══╣║║══╬╗║
+    ║╚══╣║║║╚╝║║╚╩═║╚╣══║║╠══║║║
+    ╚═══╩╝╚╩══╩╩═══╩═╩══╝╚╩══╩╩╝
+    
+    {Colors.RESET}
+    ¡Bienvenido a Tu Herramienta Multifunción!
+    """
+
+    print(f"{Colors.RED}{banner_text}{Colors.RESET}")
+
+
+def temp_del():
+    directorio_temporal = os.path.join(os.environ["TEMP"], '*')
+    
+    try:
+        archivos_temporales = glob.glob(directorio_temporal)
+        for archivo in archivos_temporales:
+            if os.path.isfile(archivo):
+                os.remove(archivo)
+        print(f"{Colors.MAGENTA}Archivos temporales borrados con éxito.{Colors.RESET}")
+    except Exception as e:
+        print(f"{Colors.YELLOW}Error al borrar archivos temporales: {e}{Colors.RESET}")
+
+def medir_velocidad():
+    st = speedtest.Speedtest()
+
+    print("Realizando prueba de velocidad...")
+    print("Espere....")
+
+    velocidad_carga = st.upload() / 10**6
+    velocidad_descarga = st.download() / 10**6
+
+    print(f"Velocidad de carga: ({Colors.MAGENTA} {velocidad_carga:.2f} Mbps{Colors.RESET})")
+    print(f"Velocidad de descarga: ({Colors.MAGENTA} {velocidad_descarga:.2f} Mbps{Colors.RESET})")
+
+def red_info():
+    host_ip = socket.gethostbyname(socket.gethostname())
+    interfaces = psutil.net_if_addrs()
+
+    print(f"{Colors.GREEN}IP del host: {host_ip}{Colors.RESET}")
+    print(f"\n{Colors.GREEN}Información de interfaz de red:{Colors.RESET}")
+    for iface, addrs in interfaces.items():
+        print(f"\t{Colors.GREEN}{iface}:{Colors.RESET}")
+        for addr in addrs:
+            print(f"\t\t- Tipo: {addr.family}, Dirección: {addr.address}, Máscara de red: {addr.netmask}{Colors.RESET}")
+
+def disk_info():
+    disco = psutil.disk_usage('/')
+
+    print(f"{Colors.GREEN}Información del Disco:{Colors.RESET}")
+    print(f"\t{Colors.GREEN}Total: {disco.total / (1024 ** 3):.2f} GB{Colors.RESET}")
+    print(f"\t{Colors.GREEN}Usado: {disco.used / (1024 ** 3):.2f} GB{Colors.RESET}")
+    print(f"\t{Colors.GREEN}Disponible: {disco.free / (1024 ** 3):.2f} GB{Colors.RESET}")
+    print(f"\t{Colors.GREEN}Porcentaje de uso: {disco.percent}%{Colors.RESET}")
+
+def sys_info():
+    print(f"{Colors.GREEN}Información del sistema:{Colors.RESET}")
+    print(f"\t{Colors.GREEN}Sistema operativo: {platform.system()} {platform.version()}{Colors.RESET}")
+    print(f"\t{Colors.GREEN}Arquitectura del sistema: {platform.architecture()}{Colors.RESET}")
+    print(f"\t{Colors.GREEN}Procesador: {platform.processor()}{Colors.RESET}")
+    print(f"\t{Colors.GREEN}Versión de Python: {platform.python_version()}{Colors.RESET}")
+
+    print(f"\n{Colors.GREEN}Información de la CPU:{Colors.RESET}")
+    cpu_info = cpuinfo.get_cpu_info()
+
+    # Intentar acceder a claves específicas
+    try:
+        print(f"\t{Colors.GREEN}Fabricante: {cpu_info['vendor_id_raw']}{Colors.RESET}")
+        print(f"\t{Colors.GREEN}Modelo: {cpu_info['brand_raw']}{Colors.RESET}")
+        print(f"\t{Colors.GREEN}Arquitectura: {cpu_info['arch']}{Colors.RESET}")
+        print(f"\t{Colors.GREEN}Núcleos físicos: {psutil.cpu_count(logical=False)}{Colors.RESET}")
+    except KeyError as e:
+        print(f"{Colors.RED}Error: Clave no encontrada en el diccionario de información de la CPU: {e}{Colors.RESET}")
+
+def salir():
+    print(f"{Colors.GREEN}Saliendo de la aplicación. ¡Bye! :){Colors.RESET}")
+    exit()
+
+def main_info():
+    esborraPantalla()
+    banner_infobyte()
+    while True:
+        menu_infobyte()
+
+        try:
+            opcio = int(input(f"\nSelecciona una opción ({Colors.RED}1-8{Colors.RESET}): "))
+            
+            options = {
+                1: medir_velocidad,
+                2: sys_info,
+                3: red_info,
+                4: disk_info,
+                5: temp_del,
+                6: salir,
+            }
+
+            if opcio in options:
+                options[opcio]()
+            else:
+                print(f"{Colors.RED}Opción no válida. Por favor, selecciona una opción correcta.{Colors.RESET}")
+        except ValueError:
+            print(f"{Colors.RED}Debes introducir un número válido{Colors.RESET}")
+
+# SHAWOBYTE
 
 # Virus Total i logs
 VIRUSTOTAL_API_KEY = ''  # api virus total
 LOGS_ENABLED = False
 LOGS_FOLDER = "./logs"
-
 
 # natejar pantalla
 def esborraPantalla():
@@ -284,7 +433,8 @@ def menu_shadowbyte():
     print(f"{Colors.RED}8. Sortir{Colors.RESET}")
 
 
-def main():
+def main_dic():
+    esborraPantalla()
     cargar_configuracion()
     banner_shadowbyte()
     log_moviment("S'ha iniciat l'aplicació.")
@@ -326,6 +476,145 @@ def main():
                 print(f"{Colors.YELLOW}Opció no vàlida. Siusplau, selecciona una opció vàlida.{Colors.RESET}")
         except ValueError:
             print(f"{Colors.YELLOW}Has d'introduir un nombre vàlid{Colors.RESET}")
+
+import csv
+from colorama import init, Fore, Style
+
+# Inicializar colorama
+init(autoreset=True)
+
+def cargar_tareas():
+    try:
+        with open('tareas.csv', 'r', newline='') as archivo:
+            lector_csv = csv.reader(archivo)
+            return [
+                dict(
+                    nombre=row[0] if len(row) > 0 else "",
+                    descripcion=row[1] if len(row) > 1 else "",
+                    prioridad=int(row[2]) if len(row) > 2 else 0,
+                    estado=row[3] if len(row) > 3 else ""
+                )
+                for row in lector_csv
+            ]
+    except FileNotFoundError:
+        return []
+
+def guardar_tareas(tareas):
+    with open('tareas.csv', 'w', newline='') as archivo:
+        escritor_csv = csv.writer(archivo)
+        for tarea in tareas:
+            escritor_csv.writerow([tarea["nombre"], tarea["descripcion"], tarea["prioridad"], tarea["estado"]])
+
+def mostrar_tareas(tareas):
+    for idx, tarea in enumerate(tareas, start=1):
+        estado_color = Fore.GREEN if tarea["estado"] == "completada" else Fore.RED
+        print(f'{idx}. [{estado_color}{tarea["estado"]}{Style.RESET_ALL}] {tarea["nombre"]}, {tarea["descripcion"]}, Prioridad: {tarea["prioridad"]}')
+
+def menu_tareas():
+    print("\n--- Gestor de Tareas ---")
+    print(f"1. {Fore.CYAN}Ver tareas{Style.RESET_ALL}")
+    print(f"2. {Fore.CYAN}Añadir tarea{Style.RESET_ALL}")
+    print(f"3. {Fore.CYAN}Marcar tarea como completada{Style.RESET_ALL}")
+    print(f"4. {Fore.CYAN}Salir{Style.RESET_ALL}")
+
+def banner_tareas():
+    banner = f"""
+{Fore.BLUE}  _______ _                 _______           _       
+ |__   __| |               |__   __|         | |      
+    | |  | |__   __ _ ______ _| | ___  _ __ | |_ ___ 
+    | |  | '_ \ / _` |_  / _` | |/ _ \| '_ \| __/ __|
+    | |  | | | | (_| |/ / (_| | | (_) | | | | |_\__ \\
+    |_|  |_| |_|\__,_/___\__,_|_|\___/|_| |_|\__|___/{Style.RESET_ALL}
+    """
+    print(banner)
+
+def nueva_tarea(tareas):
+    nombre = input(f"{Fore.CYAN}Introduce el nombre de la tarea: {Style.RESET_ALL}")
+    descripcion = input(f"{Fore.CYAN}Introduce la descripción de la tarea: {Style.RESET_ALL}")
+    try:
+        prioridad = int(input(f"{Fore.CYAN}Introduce la prioridad de la tarea (1-5): {Style.RESET_ALL}"))
+        if 1 <= prioridad <= 5:
+            nueva_tarea = {
+                "nombre": nombre,
+                "descripcion": descripcion,
+                "prioridad": prioridad,
+                "estado": "pendiente"
+            }
+            tareas.append(nueva_tarea)
+            guardar_tareas(tareas)
+            print(f"{Fore.GREEN}Tarea añadida correctamente.{Style.RESET_ALL}")
+        else:
+            print(f"{Fore.RED}La prioridad debe estar entre 1 y 5.{Style.RESET_ALL}")
+    except ValueError:
+        print(f"{Fore.RED}Debes introducir un número válido para la prioridad.{Style.RESET_ALL}")
+
+def sortir():
+    print(f"{Fore.MAGENTA}Saliendo de la aplicación. ¡Hasta luego! :) {Style.RESET_ALL}")
+    exit()
+
+def status_tarea(tareas):
+    mostrar_tareas(tareas)
+    try:
+        idx_completada = int(input(f"{Fore.CYAN}Seleccione el número de la tarea completada: {Style.RESET_ALL}")) - 1
+        if 0 <= idx_completada < len(tareas):
+            tareas[idx_completada]["estado"] = "completada"
+            guardar_tareas(tareas)
+            print(f"{Fore.GREEN}Tarea marcada como completada.{Style.RESET_ALL}")
+        else:
+            print(f"{Fore.RED}Número de tarea inválido.{Style.RESET_ALL}")
+    except ValueError:
+        print(f"{Fore.RED}Debes introducir un número válido.{Style.RESET_ALL}")
+
+def main_tareas():
+    esborraPantalla()
+    banner_tareas()
+    tareas = cargar_tareas()
+
+    while True:
+        menu_tareas()
+
+        try:
+            opcio = input(f"{Fore.CYAN}Seleccione una opción: {Style.RESET_ALL}")
+            options = {
+                "1": lambda: mostrar_tareas(tareas),
+                "2": lambda: nueva_tarea(tareas),
+                "3": lambda: status_tarea(tareas),
+                "4": sortir,
+            }
+
+            if opcio in options:
+                options[opcio]()
+            else:
+                print(f"{Fore.RED}Opción no válida. Por favor, selecciona una opción correcta.{Style.RESET_ALL}")
+        except ValueError:
+            print(f"{Fore.RED}Debes introducir un número válido.{Style.RESET_ALL}")
+
+
+def main():
+    banner_gerijacki()
+    print('Benvingut la la meva eina multifunció programmada en python :)')
+    print('Escull un de les segunts opcions per escollir quina eina vols:')
+
+    while True:
+        menu_gerijacki()
+
+        try:
+            opcio = int(input(f"\nSelecciona una opció: ({Colors.RED}1-8{Colors.RESET}): "))
+            
+            options = {
+                1: main_dic,
+                2: main_info,
+                3: main_tareas,
+                4: salir,
+            }
+
+            if opcio in options:
+                options[opcio]()
+            else:
+                print(f"{Colors.RED}Opción no válida. Por favor, selecciona una opción correcta.{Colors.RESET}")
+        except ValueError:
+            print(f"{Colors.RED}Debes introducir un número válido{Colors.RESET}")
+
 
 if __name__ == "__main__":
     esborraPantalla()
