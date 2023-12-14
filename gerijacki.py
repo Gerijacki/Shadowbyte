@@ -477,8 +477,7 @@ def main_dic():
         except ValueError:
             print(f"{Colors.YELLOW}Has d'introduir un nombre vàlid{Colors.RESET}")
 
-import csv
-from colorama import init, Fore, Style
+# TAREAS
 
 # Inicializar colorama
 init(autoreset=True)
