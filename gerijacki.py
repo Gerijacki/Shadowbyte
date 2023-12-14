@@ -662,12 +662,12 @@ def main():
             opcio = int(input(f"\nSelecciona una opció: ({Colors.RED}1-8{Colors.RESET}): "))
             
             options = {
-                1: main_info,
-                2: main_dic,
-                3: main_tareas,
-                4: main_yt,
-                5: main_passwd,
-                6: salir,
+                1: main_info, #programa info
+                2: main_dic, #programa dic compare
+                3: main_tareas, #programa tareas
+                4: main_yt, #programa yt
+                5: main_passwd, #programa passwd
+                6: salir, #sortir
             }
 
             if opcio in options:
