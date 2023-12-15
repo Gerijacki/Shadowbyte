@@ -12,6 +12,7 @@ import cpuinfo
 import requests
 import platform
 import json
+import time
 import datetime
 import csv
 import qrcode
@@ -41,7 +42,9 @@ def menu_gerijacki():
     print(f"{Colors.RED}4. YT-MP4{Colors.RESET}")
     print(f"{Colors.RED}5. PASSWD{Colors.RESET}")
     print(f"{Colors.RED}6. Generador QR{Colors.RESET}")
-    print(f"{Colors.RED}7. Sortir{Colors.RESET}")
+    print(f"{Colors.RED}7. Monitor consum{Colors.RESET}")
+    print(f"{Colors.RED}8. Buscador Fitxers{Colors.RESET}")
+    print(f"{Colors.RED}9. Sortir{Colors.RESET}")
 
 # colors de text
 class Colors:
@@ -671,7 +674,53 @@ def generar_codigo_qr(datos):
         imagen_qr = qr.make_image(fill_color="black", back_color="white")
 
         imagen_qr.save("codigo_qr_temporal.png")
-        print("Código QR generado y guardado como 'codigo_qr_temporal.png'")
+        print(f"{Fore.GREEN}Código QR generado y guardado como 'codigo_qr_temporal.png'{Style.RESET_ALL}")
+
+# MONITOR RED
+def main_monitor():
+    try:
+        bytes_enviados_inicial, bytes_recibidos_inicial = obtener_datos_de_red()
+
+        while True:
+            time.sleep(1)  # Espera 1 segundo
+            bytes_enviados_actual, bytes_recibidos_actual = obtener_datos_de_red()
+
+            bytes_enviados = bytes_enviados_actual - bytes_enviados_inicial
+            bytes_recibidos = bytes_recibidos_actual - bytes_recibidos_inicial
+
+            mostrar_informe(bytes_enviados, bytes_recibidos)
+
+    except KeyboardInterrupt:
+        print(f"{Fore.RED}\nMonitor de Uso de Internet detenido.{Style.RESET_ALL}")
+
+def obtener_datos_de_red():
+    datos = psutil.net_io_counters()
+    return datos.bytes_sent, datos.bytes_recv
+
+def mostrar_informe(bytes_enviados, bytes_recibidos):
+    print(f"{Fore.MAGENTA}Datos Enviados: {bytes_enviados / (1024 ** 2):.2f} MB{Style.RESET_ALL}")
+    print(f"{Fore.MAGENTA}Datos Recibidos: {bytes_recibidos / (1024 ** 2):.2f} MB{Style.RESET_ALL}")
+
+#BUSC FILE
+def main_buscFile():
+    directorio_base = input(f"{Fore.YELLOW}Ingrese el directorio base para la búsqueda: {Style.RESET_ALL}")
+    extension_busqueda = input(f"{Fore.YELLOW}Ingrese la extensión de archivo a buscar (por ejemplo, '.txt'): {Style.RESET_ALL}")
+
+    archivos_encontrados = buscar_archivos(directorio_base, extension_busqueda)
+
+    if archivos_encontrados:
+        print(f"{Fore.MAGENTA}Archivos encontrados:{Style.RESET_ALL}")
+        for archivo in archivos_encontrados:
+            print(archivo)
+    else:
+        print(f"{Fore.RED}No se encontraron archivos con la extensión especificada.{Style.RESET_ALL}")
+def buscar_archivos(directorio, extension):
+    archivos_encontrados = []
+    for root, dirs, files in os.walk(directorio):
+        for file in files:
+            if file.endswith(extension):
+                archivos_encontrados.append(os.path.join(root, file))
+    return archivos_encontrados
 
 def main():
     esborraPantalla()
@@ -689,8 +738,10 @@ def main():
                 3: main_tareas, #programa tareas
                 4: main_yt, #programa yt
                 5: main_passwd, #programa passwd
-                6: main_qr,
-                7: salir, #sortir
+                6: main_qr, #programa gen QR
+                7: main_monitor, #monitor xarxa
+                8: main_buscFile, #busc extencio d'arxiu
+                9: salir, #sortir
             }
 
             if opcio in options:
