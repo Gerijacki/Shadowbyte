@@ -14,6 +14,7 @@ import platform
 import json
 import datetime
 import csv
+import qrcode
 from colorama import init, Fore, Style, Back
 
 def banner_gerijacki():
@@ -39,7 +40,8 @@ def menu_gerijacki():
     print(f"{Colors.RED}3. Task{Colors.RESET}")
     print(f"{Colors.RED}4. YT-MP4{Colors.RESET}")
     print(f"{Colors.RED}5. PASSWD{Colors.RESET}")
-    print(f"{Colors.RED}6. Sortir{Colors.RESET}")
+    print(f"{Colors.RED}6. Generador QR{Colors.RESET}")
+    print(f"{Colors.RED}7. Sortir{Colors.RESET}")
 
 # colors de text
 class Colors:
@@ -650,6 +652,26 @@ def main_passwd():
 
     contrasena_generada = generar_contrasena(longitud, incluir_mayusculas, incluir_simbolos)
     print(f"Contraseña generada: {contrasena_generada}")
+# QR
+def main_qr():
+    datos = input("Ingresa los datos para el código QR: ")
+    generar_codigo_qr(datos)
+
+def generar_codigo_qr(datos):
+    if datos:
+        qr = qrcode.QRCode(
+            version=1,
+            error_correction=qrcode.constants.ERROR_CORRECT_L,
+            box_size=10,
+            border=4,
+        )
+        qr.add_data(datos)
+        qr.make(fit=True)
+
+        imagen_qr = qr.make_image(fill_color="black", back_color="white")
+
+        imagen_qr.save("codigo_qr_temporal.png")
+        print("Código QR generado y guardado como 'codigo_qr_temporal.png'")
 
 def main():
     esborraPantalla()
@@ -667,7 +689,8 @@ def main():
                 3: main_tareas, #programa tareas
                 4: main_yt, #programa yt
                 5: main_passwd, #programa passwd
-                6: salir, #sortir
+                6: main_qr,
+                7: salir, #sortir
             }
 
             if opcio in options:
