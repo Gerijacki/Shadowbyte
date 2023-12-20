@@ -27,8 +27,8 @@ def banner_gerijacki():
 {Fore.RED}▄███▄     ▄███▄ ▀██████▄       ▀███████▀  ▄███▄██  ▀██████▀   ▀██████▀   ▀██████▀
 {Fore.CYAN}▀▀▀▀    ▀▀▀▀         ▀▀                      ▀▀▀▀             ▀▀▀▀
 {Style.RESET_ALL}
-{Fore.GREEN}Benvingut la la meva eina multifunció programmada en python :) 
-Escull un de les segunts opcions per escollir quina eina vols:
+{Fore.GREEN}Bienvenido a mi herramienta multifuncion en python :) 
+Elije una de las siguinetes opciones:
 {Style.RESET_ALL}
 """
     print(banner)
@@ -36,14 +36,14 @@ Escull un de les segunts opcions per escollir quina eina vols:
 # menu
 def menu_gerijacki():
     print("\n----- MENU -----")
-    print(f"{Colors.RED}1. Info{Colors.RESET}")
-    print(f"{Colors.RED}2. Direct-X{Colors.RESET}")
-    print(f"{Colors.RED}3. Task{Colors.RESET}")
-    print(f"{Colors.RED}4. YT-MP4{Colors.RESET}")
-    print(f"{Colors.RED}5. PASSWD{Colors.RESET}")
-    print(f"{Colors.RED}6. Generador QR{Colors.RESET}")
-    print(f"{Colors.RED}7. Monitor consum{Colors.RESET}")
-    print(f"{Colors.RED}8. Buscador Fitxers{Colors.RESET}")
+    print(f"{Colors.RED}1. Info (Informacion del sistema){Colors.RESET}")
+    print(f"{Colors.RED}2. Direct-X (Comparador de directorios){Colors.RESET}")
+    print(f"{Colors.RED}3. Task (Gestor de tareas){Colors.RESET}")
+    print(f"{Colors.RED}4. YT-MP4 (Descargar videos de youtube){Colors.RESET}")
+    print(f"{Colors.RED}5. PASSWD (Generador de contraseñas){Colors.RESET}")
+    print(f"{Colors.RED}6. Generador QR (Generador de codigos QR){Colors.RESET}")
+    print(f"{Colors.RED}7. Monitor consumo (Monitor del consumo de red a tiempo real){Colors.RESET}")
+    print(f"{Colors.RED}8. Buscador Archivos (Buscar archivos en el sistema){Colors.RESET}")
     print(f"{Colors.RED}9. Sortir{Colors.RESET}")
 
 # colors de text
@@ -77,7 +77,7 @@ def banner_infobyte():
     ╚═══╩╝╚╩══╩╩═══╩═╩══╝╚╩══╩╩╝
     
     {Colors.RESET}
-    ¡Bienvenido a Tu Herramienta Multifunción!
+    ¡Bienvenido a INFO!
     """
 
     print(f"{Colors.RED}{banner_text}{Colors.RESET}")
@@ -255,26 +255,26 @@ def mostrar_configuracion():
 
 def configurar_programa():
     global VIRUSTOTAL_API_KEY, LOGS_ENABLED, LOGS_FOLDER
-    op_config = input(f"\nSelecciona una opció de configuració ({Colors.RED}1-3{Colors.RESET}, o 'T' per tornar): ")
+    op_config = input(f"\nSelecciona una opcion ({Colors.RED}1-3{Colors.RESET}, o 'T' para volver): ")
     
     if op_config == "1":
-        VIRUSTOTAL_API_KEY = input(f"{Colors.RED}Introdueix la nova clau de l'API de VirusTotal: {Colors.RESET}")
-        log_moviment("S'ha canviat la clau de l'API de VirusTotal.")
+        VIRUSTOTAL_API_KEY = input(f"{Colors.RED}Introduzca la nueva API de Virustotal: {Colors.RESET}")
+        log_moviment("API de Virustotal modificada.")
     elif op_config == "2":
         LOGS_ENABLED = not LOGS_ENABLED  # Invertir el estado actual
         print(f"Sistema de logs {'activat' if LOGS_ENABLED else 'desactivat'}.")
         log_moviment(f"S'ha {'activat' if LOGS_ENABLED else 'desactivat'} el sistema de logs.")
     elif op_config == "3":
-        LOGS_FOLDER = input(f"{Colors.RED}Introdueix la nova carpeta de logs: {Colors.RESET}")
-        log_moviment(f"S'ha canviat la carpeta de logs a: {LOGS_FOLDER}")
+        LOGS_FOLDER = input(f"{Colors.RED}Introduzca la nueva carpeta para los logs: {Colors.RESET}")
+        log_moviment(f"carpeta de logs modificada a: {LOGS_FOLDER}")
     elif op_config.lower() == "t":
         return
     else:
-        print(f"{Colors.YELLOW}Opció no vàlida.{Colors.RESET}")
+        print(f"{Colors.YELLOW}Opción no válida.{Colors.RESET}")
 
     guardar_configuracion()
-    print(f"\n{Colors.GREEN}Configuració actualitzada amb èxit.{Colors.RESET}")
-    log_moviment("S'ha guardat la configuració del programa.")
+    print(f"\n{Colors.GREEN}Configuración modificada con exito.{Colors.RESET}")
+    log_moviment("Configuración guardada.")
 
 def format_size(size):
     for unit in ['B', 'KB', 'MB', 'GB', 'TB']:
@@ -285,9 +285,9 @@ def format_size(size):
 
 def llista_fitxers_directori(directori):
     try:
-        log_moviment(f"S'ha mostrat la llista de fitxers del directori: {directori}")
+        log_moviment(f"Se ha mostrado la lista de archivos del directorio: {directori}")
         if os.path.exists(directori):
-            print(f"\nContingut de {Colors.RED}{directori}{Colors.RESET}:")
+            print(f"\nContenido de {Colors.RED}{directori}{Colors.RESET}:")
             for root, dirs, files in os.walk(directori):
                 for name in dirs:
                     path = os.path.join(root, name)
@@ -296,17 +296,17 @@ def llista_fitxers_directori(directori):
                     path = os.path.join(root, name)
                     size = os.path.getsize(path)
                     formatted_size = format_size(size)
-                    print(f"  - {Colors.MAGENTA}{name}{Colors.RESET} ({Colors.CYAN}Fitxer{Colors.RESET}, {Colors.GREEN}{formatted_size}{Colors.RESET})")
+                    print(f"  - {Colors.MAGENTA}{name}{Colors.RESET} ({Colors.CYAN}Archivo{Colors.RESET}, {Colors.GREEN}{formatted_size}{Colors.RESET})")
         else:
-            print(f"\n{Colors.YELLOW}Error: El directori {directori} no existeix.{Colors.RESET}")
+            print(f"\n{Colors.YELLOW}Error: El directorio {directori} no existe.{Colors.RESET}")
     except Exception as e:
-        print(f"\n{Colors.YELLOW}Error al mostrar la llista de fitxers: {e}{Colors.RESET}")
+        print(f"\n{Colors.YELLOW}Error al mostrar la lista de archivos: {e}{Colors.RESET}")
 
 
 # Comparar fitxers
 def compara_fitxers(directori1, directori2):
     try:
-        log_moviment("S'ha comparat la llista de fitxers en ambdós directoris.")
+        log_moviment("Se ha comparado los archivos de los dos directorios.")
         if os.path.exists(directori1) and os.path.exists(directori2):
             llista1 = set(os.listdir(directori1))
             llista2 = set(os.listdir(directori2))
@@ -315,7 +315,7 @@ def compara_fitxers(directori1, directori2):
             fitxers_exclusius_directori1 = llista1 - fitxers_comuns
             fitxers_exclusius_directori2 = llista2 - fitxers_comuns
 
-            print("\nFitxers comuns en ambdós directoris:")
+            print("\nArchivos comunes:")
             for fitxer in fitxers_comuns:
                 ruta_fitxer1 = os.path.join(directori1, fitxer)
                 ruta_fitxer2 = os.path.join(directori2, fitxer)
@@ -325,54 +325,54 @@ def compara_fitxers(directori1, directori2):
 
                 print(f"- {Colors.MAGENTA}{fitxer}{Colors.RESET} ({Colors.CYAN}{tipus_fitxer1}{Colors.RESET}, {Colors.GREEN}{mida_fitxer1} bytes{Colors.RESET}), ({Colors.CYAN}{tipus_fitxer2}{Colors.RESET}, {Colors.GREEN}{mida_fitxer2} bytes{Colors.RESET})")
 
-            print("\nFitxers exclusius en el directori 1:")
+            print("\nArchivos exclusivos del directorio 1:")
             for fitxer in fitxers_exclusius_directori1:
                 ruta_fitxer1 = os.path.join(directori1, fitxer)
                 tipus_fitxer1, mida_fitxer1 = obtenir_info_fitxer(ruta_fitxer1)
                 print(f"- {Colors.MAGENTA}{fitxer}{Colors.RESET} ({Colors.CYAN}{tipus_fitxer1}{Colors.RESET}, {Colors.GREEN}{mida_fitxer1} bytes{Colors.RESET})")
 
-            print("\nFitxers exclusius en el directori 2:")
+            print("\nArchivos exclusivos del directorio 2:")
             for fitxer in fitxers_exclusius_directori2:
                 ruta_fitxer2 = os.path.join(directori2, fitxer)
                 tipus_fitxer2, mida_fitxer2 = obtenir_info_fitxer(ruta_fitxer2)
                 print(f"- {Colors.MAGENTA}{fitxer}{Colors.RESET} ({Colors.CYAN}{tipus_fitxer2}{Colors.RESET}, {Colors.GREEN}{mida_fitxer2} bytes{Colors.RESET})")
         else:
-            print(f"\n{Colors.YELLOW}Error: Un dels directoris no existeix.{Colors.RESET}")
+            print(f"\n{Colors.YELLOW}Error: Uno de los directorios no existe.{Colors.RESET}")
     except Exception as e:
-        print(f"\n{Colors.YELLOW}Error al comparar fitxers: {e}{Colors.RESET}")
+        print(f"\n{Colors.YELLOW}Error al comparar los archivos: {e}{Colors.RESET}")
 
 def compara_fitxer(directori1, directori2, nom_fitxer):
     try:
-        log_moviment(f"S'ha comparat el fitxer: {nom_fitxer}")
+        log_moviment(f"Se ha comparado el archivo: {nom_fitxer}")
         path1 = os.path.join(directori1, nom_fitxer)
         path2 = os.path.join(directori2, nom_fitxer)
 
         if os.path.exists(path1) and os.path.exists(path2):
-            print(f"\nComparant contingut del fitxer {Colors.MAGENTA}{nom_fitxer}{Colors.RESET} en ambdós directoris:")
+            print(f"\nComparando el archivo {Colors.MAGENTA}{nom_fitxer}{Colors.RESET} en los dos directorios:")
             with open(path1, 'rb') as file1, open(path2, 'rb') as file2:
                 content1 = file1.read()
                 content2 = file2.read()
 
                 if content1 == content2:
-                    print(f'El contingut del {Colors.GREEN}fitxer és idèntic{Colors.RESET} en ambdós directoris.')
+                    print(f'El contenido del {Colors.GREEN}archivo és identico{Colors.RESET} en los dos directorios.')
                 else:
-                    print(f'El contingut del {Colors.YELLOW}fitxer és diferent{Colors.RESET} en ambdós directoris.')
+                    print(f'El contenido del {Colors.YELLOW}archivo és distinto{Colors.RESET} en los dos directorios.')
         else:
-            print(f"\n{Colors.YELLOW}Error: Fitxer {nom_fitxer} no trobat en un dels directoris.{Colors.RESET}")
+            print(f"\n{Colors.YELLOW}Error: Archivo {nom_fitxer} no encontrado en uno de los directorios.{Colors.RESET}")
     except Exception as e:
-        print(f"\n{Colors.YELLOW}Error al comparar fitxer: {e}{Colors.RESET}")
+        print(f"\n{Colors.YELLOW}Error al comparar el archivo: {e}{Colors.RESET}")
 
 def obtenir_info_fitxer(ruta_fitxer):
     try:
         if os.path.isfile(ruta_fitxer):
-            tipus_fitxer = "Fitxer"
+            tipus_fitxer = "Archivo"
             mida_fitxer = os.path.getsize(ruta_fitxer)
         else:
-            tipus_fitxer = "Directori"
+            tipus_fitxer = "Directorio"
             mida_fitxer = sum(os.path.getsize(os.path.join(ruta_fitxer, f)) for f in os.listdir(ruta_fitxer))
         return tipus_fitxer, mida_fitxer
     except Exception as e:
-        print(f"\n{Colors.YELLOW}Error al obtenir informació del fitxer: {e}{Colors.RESET}")
+        print(f"\n{Colors.YELLOW}Error al obtener la información{e}{Colors.RESET}")
         return "", 0
 
 
@@ -381,7 +381,7 @@ def penja_a_virustotal(nom_fitxer):
     params = {'apikey': VIRUSTOTAL_API_KEY}
 
     try:
-        log_moviment(f"S'ha penjat el fitxer a VirusTotal: {nom_fitxer}")
+        log_moviment(f"Se ha subido el archivo a Virustotal: {nom_fitxer}")
         with open(nom_fitxer, 'rb') as file:
             files = {'file': (nom_fitxer, file)}
             response = requests.post(url, files=files, params=params)
@@ -389,42 +389,42 @@ def penja_a_virustotal(nom_fitxer):
             # resposta HTTP
             if response.status_code == 200:
                 result = response.json()
-                print(f"\nResultats de VirusTotal:")
+                print(f"\nResultado:")
                 print(f"SHA-256: {result.get('sha256')}")
                 print(f"Permalink: {result.get('permalink')}")
-                print("Resultat de l'anàlisi:", result.get('verbose_msg'))
+                print("Resultado:", result.get('verbose_msg'))
             else:
                 print(f"\n{Colors.YELLOW}Error en la solicitud a VirusTotal. Código de respuesta HTTP: {response.status_code}{Colors.RESET}")
 
     except FileNotFoundError:
-        print(f"\n{Colors.YELLOW}Error: Fitxer no trobat: {nom_fitxer}{Colors.RESET}")
+        print(f"\n{Colors.YELLOW}Error: Archivo no encontrado: {nom_fitxer}{Colors.RESET}")
     except requests.RequestException as e:
         print(f"\n{Colors.YELLOW}Error en la solicitud a VirusTotal: {e}{Colors.RESET}")
 
 def canviar_directoris():
     global directori1, directori2
-    nou_directori1 = input(f"{Colors.RED}Introdueix el nou camí del directori 1: {Colors.RESET}")
-    nou_directori2 = input(f"{Colors.RED}Introdueix el nou camí del directori 2: {Colors.RESET}")
+    nou_directori1 = input(f"{Colors.RED}Introduzca la ruta al directorio 1: {Colors.RESET}")
+    nou_directori2 = input(f"{Colors.RED}Introduzca la ruta al directorio 2: {Colors.RESET}")
 
     try:
         if os.path.exists(nou_directori1):
             directori1 = nou_directori1
-            print(f"\n{Colors.GREEN}Directori 1 canviat amb èxit.{Colors.RESET}")
+            print(f"\n{Colors.GREEN}Directori 1 modificado con exito.{Colors.RESET}")
         else:
-            print(f"\n{Colors.YELLOW}Error: El directori {nou_directori1} no existeix.{Colors.RESET}")
+            print(f"\n{Colors.YELLOW}Error: El directorio {nou_directori1} no existe.{Colors.RESET}")
 
         if os.path.exists(nou_directori2):
             directori2 = nou_directori2
-            print(f"\n{Colors.GREEN}Directori 2 canviat amb èxit.{Colors.RESET}")
+            print(f"\n{Colors.GREEN}Directorio 2 modificado con exito.{Colors.RESET}")
         else:
-            print(f"\n{Colors.YELLOW}Error: El directori {nou_directori2} no existeix.{Colors.RESET}")
+            print(f"\n{Colors.YELLOW}Error: El directorio {nou_directori2} no existe.{Colors.RESET}")
 
     except Exception as e:
-        print(f"\n{Colors.YELLOW}Error al canviar els directoris: {e}{Colors.RESET}")
+        print(f"\n{Colors.YELLOW}Error al modificar los directorios: {e}{Colors.RESET}")
 
 # Funció per sortir
 def sortir():
-    print(f"{Colors.GREEN}Sortint de l'aplicació. ¡Bye! :){Colors.RESET}")
+    print(f"{Colors.GREEN}Saliendo de l'aplicación. ¡Bye! :){Colors.RESET}")
     exit()
 
 def config():
@@ -435,48 +435,48 @@ def config():
 # menu
 def menu_shadowbyte():
     print("\n----- MENU -----")
-    print(f"{Colors.RED}1. Mostrar llista de fitxers en directori 1{Colors.RESET}")
-    print(f"{Colors.RED}2. Mostrar llista de fitxers en directori 2{Colors.RESET}")
-    print(f"{Colors.RED}3. Comparar fitxers en ambdós directoris{Colors.RESET}")
-    print(f"{Colors.RED}4. Comparar fitxer específic{Colors.RESET}")
-    print(f"{Colors.RED}5. Penjar un fitxer a VirusTotal i verificar malware{Colors.RESET}")
-    print(f"{Colors.RED}6. Canviar directoris{Colors.RESET}")
-    print(f"{Colors.RED}7. Configuració{Colors.RESET}")
-    print(f"{Colors.RED}8. Sortir{Colors.RESET}")
+    print(f"{Colors.RED}1. Mostrar los archivos del directorio 1{Colors.RESET}")
+    print(f"{Colors.RED}2. Mostrar los archivos del directorio 2{Colors.RESET}")
+    print(f"{Colors.RED}3. Comparar los dos directorios{Colors.RESET}")
+    print(f"{Colors.RED}4. Comparar un archivo específico{Colors.RESET}")
+    print(f"{Colors.RED}5. Subir archivo a Virustotal i verificar Malware{Colors.RESET}")
+    print(f"{Colors.RED}6. Modificar directorios{Colors.RESET}")
+    print(f"{Colors.RED}7. Configuración{Colors.RESET}")
+    print(f"{Colors.RED}8. Salir{Colors.RESET}")
 
 
 def main_dic():
     esborraPantalla()
     cargar_configuracion()
     banner_shadowbyte()
-    log_moviment("S'ha iniciat l'aplicació.")
+    log_moviment("Aplicación iniciada.")
 
     global directori1, directori2
 
-    directori1 = input(f"{Colors.RED}Introdueix el camí del directori 1: {Colors.RESET}")
-    directori2 = input(f"{Colors.RED}Introdueix el camí del directori 2: {Colors.RESET}")
+    directori1 = input(f"{Colors.RED}Introduzca la ruta del directorio 1: {Colors.RESET}")
+    directori2 = input(f"{Colors.RED}Introduzca la ruta del directorio 2: {Colors.RESET}")
 
     if not os.path.exists(directori1):
-        print(f"\n{Colors.YELLOW}Error: El directori {directori1} no existeix.{Colors.RESET}")
-        log_moviment(f"S'ha intentat accedir a un directori inexistent: {directori1}")
+        print(f"\n{Colors.YELLOW}Error: El directorio {directori1} no existe.{Colors.RESET}")
+        log_moviment(f"Se ha intentado acceder a un directorio que no existe: {directori1}")
         exit
 
     if not os.path.exists(directori2):
         print(f"\n{Colors.YELLOW}Error: El directori {directori2} no existeix.{Colors.RESET}")
-        log_moviment(f"S'ha intentat accedir a un directori inexistent: {directori2}")
+        log_moviment(f"Se ha intentado acceder a un directorio que no existe: {directori2}")
         exit
 
     while True:
         menu_shadowbyte()
         try:
-            opcio = int(input(f"\nSelecciona una opció ({Colors.RED}1-6{Colors.RESET}): "))
+            opcio = int(input(f"\nSelecciona una opción ({Colors.RED}1-6{Colors.RESET}): "))
             
             options = {
                 1: lambda: llista_fitxers_directori(directori1),
                 2: lambda: llista_fitxers_directori(directori2),
                 3: lambda: compara_fitxers(directori1, directori2),
-                4: lambda: compara_fitxer(directori1, directori2, input(f"{Colors.RED}Introdueix el nom del fitxer a comparar: {Colors.RESET}")),
-                5: lambda: penja_a_virustotal(input(f"{Colors.RED}Introdueix el nom del fitxer a penjar: {Colors.RESET}")),
+                4: lambda: compara_fitxer(directori1, directori2, input(f"{Colors.RED}Introduzca el nombre del archivo a comparar: {Colors.RESET}")),
+                5: lambda: penja_a_virustotal(input(f"{Colors.RED}Introduzca el nombre del archivo a subir: {Colors.RESET}")),
                 6: canviar_directoris,
                 7: config,
                 8: main,
@@ -485,9 +485,9 @@ def main_dic():
             if opcio in options:
                 options[opcio]()
             else:
-                print(f"{Colors.YELLOW}Opció no vàlida. Siusplau, selecciona una opció vàlida.{Colors.RESET}")
+                print(f"{Colors.YELLOW}Opción no válida. Por favor, selecciona una opción correcta.{Colors.RESET}")
         except ValueError:
-            print(f"{Colors.YELLOW}Has d'introduir un nombre vàlid{Colors.RESET}")
+            print(f"{Colors.YELLOW}Introduzca un nombre válido{Colors.RESET}")
 
 # TAREAS
 
@@ -609,7 +609,7 @@ def banner_yt():
      | |    | |__| | |__| | | |____| |___| |____
      |_|     \____/ \____/|_|\_____|______|______|
     """)
-    print(f"{Fore.MAGENTA}Benvingut a la eina YT_to_MP4{Style.RESET_ALL}")
+    print(f"{Fore.MAGENTA}Bienvenido a la herramienta de YT_to_MP4{Style.RESET_ALL}")
 
 def descargar_video(url, carpeta_destino, formato, calidad):
     try:
@@ -648,7 +648,7 @@ def generar_contrasena(longitud=12, incluir_mayusculas=True, incluir_simbolos=Tr
 def main_passwd():
     esborraPantalla()
     banner_yt()
-    print(f"{Fore.MAGENTA}Benvingut a la eina de generar contrasenyes segures :){Style.RESET_ALL}")
+    print(f"{Fore.MAGENTA}Bienvenido a mi herramienta para generar contraseñas seguras :){Style.RESET_ALL}")
     longitud = int(input(f"{Fore.YELLOW}Ingrese la longitud de la contraseña: {Style.RESET_ALL}"))
     incluir_mayusculas = input(f"{Fore.YELLOW}¿Incluir mayúsculas? (s/n): {Style.RESET_ALL}").lower() == 's'
     incluir_simbolos = input(f"{Fore.YELLOW}¿Incluir símbolos? (s/n): {Style.RESET_ALL}").lower() == 's'
@@ -730,7 +730,7 @@ def main():
         menu_gerijacki()
 
         try:
-            opcio = int(input(f"\nSelecciona una opció: ({Colors.RED}1-8{Colors.RESET}): "))
+            opcio = int(input(f"\nSeleccione una opción: ({Colors.RED}1-8{Colors.RESET}): "))
             
             options = {
                 1: main_info, #programa info
@@ -753,5 +753,9 @@ def main():
 
 
 if __name__ == "__main__":
-    esborraPantalla()
-    main()
+    try:
+        esborraPantalla()
+        main()
+    except KeyboardInterrupt:
+        salir()
+
