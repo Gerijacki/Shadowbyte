@@ -10,6 +10,7 @@ import socket
 import platform
 import cpuinfo
 import requests
+import subprocess
 import platform
 import json
 import time
@@ -18,14 +19,157 @@ import csv
 import qrcode
 from colorama import init, Fore, Style, Back
 
+def banner_update():
+    banner = f"""
+    {Fore.BLUE}
+    ooooo  oooo oooooooooo  ooooooooo        o      ooooooooooo ooooooooooo 
+     888    88   888    888  888    88o     888     88  888  88  888    88  
+     888    88   888oooo88   888    888    8  88        888      888ooo8    
+     888    88   888         888    888   8oooo88       888      888    oo  
+      888oo88   o888o       o888ooo88   o88o  o888o    o888o    o888ooo8888 
+
+    {Style.RESET_ALL}"""
+    print(banner)
+
+
+def ejecutar_comando(comando):
+    proceso = subprocess.Popen(comando, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    salida_stdout, salida_stderr = proceso.communicate()
+    salida_stdout_decodificada = salida_stdout.decode('utf-8')
+    salida_stderr_decodificada = salida_stderr.decode('utf-8')
+    return salida_stdout_decodificada, salida_stderr_decodificada
+
+def update_prog(var_update, var_upgrade):
+    try:
+        if var_update == True:
+            if platform.system() == 'Linux':
+                comando = 'sudo apt update'
+            else:
+                comando = 'winget update'
+        if var_upgrade == True:
+            if platform.system() == 'Linux':
+                comando = 'sudo apt upgrade'
+            else:
+                comando = 'winget update --all'
+
+        salida_stdout, salida_stderr = ejecutar_comando(comando)
+
+        print("Procesando...:")
+        print(f"{Colors.GREEN}{salida_stdout}{Colors.RESET}")
+    
+    except Exception as e:
+        print("Error: ")
+        print(f"{Colors.RED}{salida_stderr}{Colors.RESET}")
+
+
+def update_packet():
+    try:
+        print(f"{Colors.RED}Introduce el id del paquete que quiere actualizar: {Colors.RESET}", end='')
+        paquete = input()
+        try:
+            if platform.system() == 'Linux':
+                comando = f"apt-get install --only-upgrade {paquete}"
+            else:
+                comando = f'winget upgrade -h --id {paquete}'
+
+            salida_stdout, salida_stderr = ejecutar_comando(comando)
+            print("Procesando...:")
+            print(f"{Colors.GREEN}{salida_stdout}{Colors.RESET}")
+        except:
+            print(f"{Colors.YELLOW}Ha sucedido algun error{Colors.RESET}")
+    except:
+        print(f"{Colors.YELLOW}Introduce un paquete válido!{Colors.RESET}")
+
+
+
+# menu update
+def menu_update():
+    print("\n----- MENU -----")
+    print(f"{Colors.RED}1. Actualitzar todos los programas{Colors.RESET}")
+    print(f"{Colors.RED}2. Actualizar solo un programa{Colors.RESET}")
+    print(f"{Colors.RED}3. Salir{Colors.RESET}")
+
+
+# main program actualizar
+def main_update():
+    esborraPantalla()
+    print("Cargando las actualizaciones de las aplicaciones...")
+    update_prog(True, False)
+
+    while True:
+        menu_update()
+        try:
+            opcio = int(input(f"\nSelecciona una opción ({Colors.RED}1-3{Colors.RESET}): "))
+            
+            options = {
+                1: lambda: update_prog(False, True),
+                2: lambda: update_packet(),
+                3: main,
+            }
+
+            if opcio in options:
+                options[opcio]()
+            else:
+                print(f"{Colors.YELLOW}Opción no válida. Por favor, selecciona una opción correcta.{Colors.RESET}")
+        except ValueError:
+            print(f"{Colors.YELLOW}Introduzca un nombre válido{Colors.RESET}")
+
+
 def banner_gerijacki():
     banner = f"""
-{Fore.MAGENTA} ▄███▄   ████▄██▄   ▄███▄     ▄▄▄▄███▄▄▄▄    ▄██████▄  ▄██████▄   ▄██████▄     ▄██████▄
-{Fore.MAGENTA}██▀  ▀  ██▀  ▀██   ██▀  ▀       ████▀██▀   ███    ███ ██    ███ ██    ███   ██▀  ▀██
-{Fore.RED}▀█▄    ██     ▀█ ██               ██     ▄█████▄  ██    ███ ██    ███  ██    ███
-{Fore.RED}  ▀██  ██▄   ▄█ ██               ██    ██▀  ▀██ ██    ███ ██    ███  ██    ███
-{Fore.RED}▄███▄     ▄███▄ ▀██████▄       ▀███████▀  ▄███▄██  ▀██████▀   ▀██████▀   ▀██████▀
-{Fore.CYAN}▀▀▀▀    ▀▀▀▀         ▀▀                      ▀▀▀▀             ▀▀▀▀
+{Fore.MAGENTA}@@@@@@@@@@@@@@@@@@@%*++++===---:--=*##**+++++++++***=---=#%@@@@@@@@%=:@@@@@@@@@@@@@@@@@@@@
+{Fore.MAGENTA}@@@@@@@@@@@@@@@@@@=+#@@@@@@@@@%%#+-.-=+*#%@@@@@%#*=-:-*%@@@@@@@@@@%*:+@@@@@@@@@@@@@@@@@@@@
+{Fore.MAGENTA}@@@@@@@@@@@@@@@@@#=#%@@@@@@@@@@@%%%@@@@@@@@@@@@@@@@@@@#%%@@@@@@@@@#=.%@@@@@%%@@@@@@@@@@@@@
+{Fore.MAGENTA}@@@@@@@@@@@@@@@@@@+*%@@@@@@@@%%@@%#**%@@@@@@@@@@@@@@%#%%@@%%%@@@@%+.+%%#***#%@@@@@@@@@@@@@
+{Fore.MAGENTA}@@@@@@@@@@@@@@@@@@**%@@@@@@%%@#=.  .-.-@@@@@@@@@@@*+*+===*%@%##@%*-:**+*##*##@@@@@@@@@@@@@
+{Fore.MAGENTA}@@@@@@@@@@%%%@@@@@%+#@@@@@%@@-    -%%. @@@@@@@@@@@=*@@*====+@@*-+-:++=+*****#@@@@@@@@@@@@@
+{Fore.MAGENTA}@@@@@@@@@@#*#*+++**#+#@@##@@:      :  *@@@@@@@@@@@%==+=-=====@@*..--==++++++*@@@@@@@@@@@@@
+{Fore.MAGENTA}@@@@@@@@@@#++++++++++*%*+%@+       .=%@@@@@@@@@@@@@@*=----===#@%+.:====+=+++*@@@@@@@@@@@@@
+{Fore.MAGENTA}@@@@@@@@@@*++++++==::--=#%@%:  .-+#@@@@@@@@@@@@@@@@@@@%*+===+%@%#+ -+++++**:+@@@@@@@@@@@@@
+{Fore.MAGENTA}@@@@@@@@@@+=+++=++=--::*%@@@@@@@@@@@@@@@@@@@#@@@@@@@%%%%@@@@@@@@%*- ==+**#**#@@@@@@@@@@@@@
+{Fore.MAGENTA}@@@@@@@@@@+=++==+=+:-.=#@@@@@@@@@@@@@@@@@@@@@%%@@@@@@@@@@@@@@@@@@#+::+*#+++=*@@@@@@@@@@@@@
+{Fore.MAGENTA}@@@@@@@@@@#*+++=+++-:.*%@@@@@@@@@@@@@%%%@@@@@@@@@@@@@@@@@@@@@@@@@%#= =+-::.:+@@@@@@@@@@@@@
+{Fore.MAGENTA}@@@@@@@@@@#*++=====:.-#%@@@@@%%%@@%#*#%%%%%%%@@@@@@@@@@@@@@@@%@@@@%*:-=:-=++#@@@@@@@@@@@@@
+{Fore.MAGENTA}@@@@@@@@@@*++===--=:.+%@@@@%#%@@@@@@%%@@%%%@@@%@@@@@%@%+=%@@@##%@@%#=.=+++++#@@@@@@@@@@@@@
+{Fore.MAGENTA}@@@@@@@@@@#*+++=--=-.*%@@@#*%@%%###**%@%%@@%##%%%%##**=--=#%@@@@@@@%+ =+++++#@@@@@@@@@@@@@
+{Fore.MAGENTA}@@@@@@@@@@%#******+-:#@@@%%@@@%#*#%@%#*#*#%@%%%#**#@@@@@%++%%@%%@@@@#.-+++++#@@@@@@@@@@@@@
+{Fore.MAGENTA}@@@@@@@@@@%#**++++++:#@@@@%@@@#+=--++-=%%##*++-:-+=----:-=-#%@@%@@@@%:-++***#@@@@@@@@@@@@@
+{Fore.MAGENTA}@@@@@@@@@@%#*******+:%@@@@@%@@%--=:  .==::........::.  :=--*@@@@@@@@@:-+=+++#@@@@@@@@@@@@@
+{Fore.MAGENTA}@@@@@@@@@@%##*****++-#@@@@%*%@#-=. -%%*-: ....   :-#%#: :--%@#*%@@@@@:=+****#@@@@@@@@@@@@@
+{Fore.MAGENTA}@@@@@@@@@@%%###*##**=+@@@@%==%*--  @@@@@.        :@@@@# .--##==%@@@@%:=+++++#@@@@@@@@@@@@@
+{Fore.MAGENTA}@@@@@@@@@@%##**####**-#@@@@#--+--: =%@%+          +%%#- :--+-=#@@@@@=-=+++++#@@@@@@@@@@@@@
+{Fore.MAGENTA}@@@@@@@@@@%#######**#*-#@@@@@#*+:::..:.    .:..    .:..:::+*#@@@@@@+:=+*****%@@@@@@@@@@@@@
+{Fore.MAGENTA}@@@@@@@@@@%#*++++*****+-+@@@@@@@+..                    ..*@@@@@@@#-.:::::.::#@@@@@@@@@@@@@
+{Fore.MAGENTA}@@@@@@@@@@%%=:----------::*@@@@@@#-                   .=%@@@@@@%=:----==++++%@@@@@@@@@@@@@
+{Fore.MAGENTA}@@@@@@@@@@%*******+++=--:. -#@@@@@@%+-.            :=*@@@@@@@%=:-===++*#####%@@@@@@@@@@@@@
+{Fore.MAGENTA}@@@@@@@@@@#-+++++++=-:::-=*###%@@@@@@@@%+::....:-+%@@@@@@@@#=::---==+++##%##%@@@@@@@@@@@@@
+{Fore.MAGENTA}@@@@@@@@@@%-+**=-::-+#%%@@@@@@@%%@@@@@@#+--------+#@@@@@@%#=..:-==+++++**+++%@@@@@@@@@@@@@
+{Fore.MAGENTA}@@@@@@@@@@%-==:-+#@@@@@@@@@@@@@@@@@@@@@@#=......=#@%%@@@@@@@%+..---==---====%@@@@@@@@@@@@@
+{Fore.MAGENTA}@@@@@@@@@@%-::*%@@@@@@@@@@@@@@@@@@@@@%*@@%*+==+*%@@#*#@@@@@@@@%+.:--=====---%@@@@@@@@@@@@@
+{Fore.MAGENTA}@@@@@@@@@@%-:*%@@@@@@@@@@@@@@@@@@@@@@@.%%%#*++*#%%%:%%#%%@@@%**+=..::::-----=+#@@@@@@@@@@@
+{Fore.MAGENTA}@@@@@@@@@@@+=#@@@@@@@@@@@@@@@@@@@@@@@@.#%%#*++*#%%%.%@@%%%%%+-+**#########%%%##@@@@@@@@@@@
+{Fore.MAGENTA}@@@@@@@@@@@#=#@@@%@@@@@%%#%@@@@@@@@@@%:#%%%#**#%%%%.%@%#=+===*#%%%%%%%%%%%%%%#@@@@@@@@@@@@
+{Fore.MAGENTA}@@@@@@@@@@@%**%@%@@@@#+=----==+==--=+*:*%%%%**%%%%%.%%::=+*=+#%@@@@@@@@@@@@%#@@@@@@@@@@@@@
+{Fore.MAGENTA}@@@@@@@@@@@@%*#%%@@@#---:-----: .:.  .:.:*%%*+%%%%%#%@@@%##+*#%@@@@@@@@@@@@%%@@@@@@@@@@@@@
+{Fore.MAGENTA}@@@@@@@@@@@@@%**%@@@%-:..:..  -. :-:  #%+=%%#*%%%%%%%@@+::=+#%@@@@@@@@@@@@%%%@@@@@@@@@@@@@
+{Fore.MAGENTA}@@@@@@@@@#+*#@%++#@%%+@%#+-:. := -+-: .%%%%%%#%%%%%%@@*..:+*#%@@@@@@@@@@@@%%@@@@@@@@@@@@@@
+{Fore.MAGENTA}@@@@@@@@@*++++**+**+#+**#*==*- = :+=--.-==============-::++#%@@@@@@@@@@@@%%%@@@@@@@@@@@@@@
+{Fore.MAGENTA}@@@@@@@@@@@@@%##%%##%*.--=+#%+--==-==-=----:---:-----:::-+*#@@@@@@@@@@@@@%@@@@@@@@@@@@@@@@
+{Fore.MAGENTA}@@@@@@@@@@@@@@@@@@#@#%.-=++*=-----------:--:-------:----+*#%@@@@@@@@@@%%-#@@@@@@@@@@@@@@@@
+{Fore.MAGENTA}@@@@@@@@@@@@@@#@@@#@#%.*###*======-=--==-=--=-=--==-==--+*#%%%%%@%@@@@@%+++@@@@@@@@@@@@@@@
+{Fore.MAGENTA}@@@@@@@@@@@@@#@@@@%@%*+===+*%%%%%%%%%%%%%%%%%%%%%%%%%*##%@@@@@@@%###@@@@@@@#%@@@@@@@@@@@@@
+{Fore.MAGENTA}@@@@@@@@@@@@@@@@@@@%%##++++#@@@@@@@@@@@@@@@@%%%%%%%%#%%%###@@@##%@@@@@@@@@@@@@@@@@@@@@@@@@
+{Fore.MAGENTA}@@@@@@@@@@@@@@@@@@@@@%%%%%###%%%%%%%%%%%%%%%@@@%%%%%@@%%%@@#%@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+{Fore.MAGENTA}@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@%%%%%%%%%@@@@@@@@@@@@@@@@@@@@@%@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+{Fore.MAGENTA}@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+{Fore.MAGENTA} ▄▄▄▄▄▄▄ ▄▄   ▄▄ ▄▄▄▄▄▄ ▄▄▄▄▄▄  ▄▄▄▄▄▄▄ ▄     ▄ ▄▄▄▄▄▄▄ ▄▄   ▄▄ ▄▄▄▄▄▄▄ ▄▄▄▄▄▄▄ 
+{Fore.MAGENTA}    █       █  █ █  █      █      ██       █ █ ▄ █ █  ▄    █  █ █  █       █       █
+{Fore.MAGENTA}    █  ▄▄▄▄▄█  █▄█  █  ▄   █  ▄    █   ▄   █ ██ ██ █ █▄█   █  █▄█  █▄     ▄█    ▄▄▄█
+{Fore.MAGENTA}    █ █▄▄▄▄▄█       █ █▄█  █ █ █   █  █ █  █       █       █       █ █   █ █   █▄▄▄ 
+{Fore.MAGENTA}    █▄▄▄▄▄  █   ▄   █      █ █▄█   █  █▄█  █       █  ▄   ██▄     ▄█ █   █ █    ▄▄▄█
+{Fore.MAGENTA}     ▄▄▄▄▄█ █  █ █  █  ▄   █       █       █   ▄   █ █▄█   █ █   █   █   █ █   █▄▄▄ 
+{Fore.MAGENTA}    █▄▄▄▄▄▄▄█▄▄█ █▄▄█▄█ █▄▄█▄▄▄▄▄▄██▄▄▄▄▄▄▄█▄▄█ █▄▄█▄▄▄▄▄▄▄█ █▄▄▄█   █▄▄▄█ █▄▄▄▄▄▄▄█
 {Style.RESET_ALL}
 {Fore.GREEN}Bienvenido a mi herramienta multifuncion en python :) 
 Elije una de las siguinetes opciones:
@@ -44,7 +188,8 @@ def menu_gerijacki():
     print(f"{Colors.RED}6. Generador QR (Generador de codigos QR){Colors.RESET}")
     print(f"{Colors.RED}7. Monitor consumo (Monitor del consumo de red a tiempo real){Colors.RESET}")
     print(f"{Colors.RED}8. Buscador Archivos (Buscar archivos en el sistema){Colors.RESET}")
-    print(f"{Colors.RED}9. Sortir{Colors.RESET}")
+    print(f"{Colors.RED}9. Actualizar dispositivo (Busca y actualiza las aplicaciones del sistema){Colors.RESET}")
+    print(f"{Colors.RED}10. Sortir{Colors.RESET}")
 
 # colors de text
 class Colors:
@@ -69,12 +214,12 @@ def menu_infobyte():
 def banner_infobyte():
     banner_text = f"""
     {Colors.CYAN}
-    ╔═══╗─────╔╗───╔╗───╔╗
-    ║╔══╝─────║║───║║──╔╝╚╗
-    ║╚══╦╗╔╦══╣║╔══╣║╔═╩╗╔╬══╦═╗
-    ║╔══╣║║║╔╗║║║╔═╣║║══╣║║══╬╗║
-    ║╚══╣║║║╚╝║║╚╩═║╚╣══║║╠══║║║
-    ╚═══╩╝╚╩══╩╩═══╩═╩══╝╚╩══╩╩╝
+    ooooooooooo ooooo ooooo       ooooooooooo 
+    888    88   888   888         888    88  
+    888ooo8     888   888         888ooo8    
+    888         888   888      o  888    oo  
+    o888o       o888o o888ooooo88 o888ooo8888 
+                                          
     
     {Colors.RESET}
     ¡Bienvenido a INFO!
@@ -217,13 +362,12 @@ def guardar_configuracion():
 def banner_shadowbyte():
     banner = f"""
     {Colors.BLUE}
-     ▄▄▄▄▄▄▄ ▄▄   ▄▄ ▄▄▄▄▄▄ ▄▄▄▄▄▄  ▄▄▄▄▄▄▄ ▄     ▄ ▄▄▄▄▄▄▄ ▄▄   ▄▄ ▄▄▄▄▄▄▄ ▄▄▄▄▄▄▄ 
-    █       █  █ █  █      █      ██       █ █ ▄ █ █  ▄    █  █ █  █       █       █
-    █  ▄▄▄▄▄█  █▄█  █  ▄   █  ▄    █   ▄   █ ██ ██ █ █▄█   █  █▄█  █▄     ▄█    ▄▄▄█
-    █ █▄▄▄▄▄█       █ █▄█  █ █ █   █  █ █  █       █       █       █ █   █ █   █▄▄▄ 
-    █▄▄▄▄▄  █   ▄   █      █ █▄█   █  █▄█  █       █  ▄   ██▄     ▄█ █   █ █    ▄▄▄█
-     ▄▄▄▄▄█ █  █ █  █  ▄   █       █       █   ▄   █ █▄█   █ █   █   █   █ █   █▄▄▄ 
-    █▄▄▄▄▄▄▄█▄▄█ █▄▄█▄█ █▄▄█▄▄▄▄▄▄██▄▄▄▄▄▄▄█▄▄█ █▄▄█▄▄▄▄▄▄▄█ █▄▄▄█   █▄▄▄█ █▄▄▄▄▄▄▄█
+   ooooo oooo   oooo ooooooooooo   ooooooo   
+    888   8888o  88   888    88  o888   888o 
+    888   88 888o88   888ooo8    888     888 
+    888   88   8888   888        888o   o888 
+   o888o o88o    88  o888o         88ooo88   
+                                          
 
     """
     print(f"{Colors.RED}{banner}{Colors.RESET}")
@@ -530,12 +674,13 @@ def menu_tareas():
 
 def banner_tareas():
     banner = f"""
-{Fore.BLUE}  _______ _                 _______           _       
- |__   __| |               |__   __|         | |      
-    | |  | |__   __ _ ______ _| | ___  _ __ | |_ ___ 
-    | |  | '_ \ / _` |_  / _` | |/ _ \| '_ \| __/ __|
-    | |  | | | | (_| |/ / (_| | | (_) | | | | |_\__ \\
-    |_|  |_| |_|\__,_/___\__,_|_|\___/|_| |_|\__|___/{Style.RESET_ALL}
+    {Fore.BLUE}
+    ooooooooooo      o       oooooooo8  oooo   oooo  oooooooo8  
+    88  888  88     888     888          888  o88   888         
+        888        8  88     888oooooo   888888      888oooooo  
+        888       8oooo88           888  888  88o           888 
+       o888o    o88o  o888o o88oooo888  o888o o888o o88oooo888  
+    {Style.RESET_ALL}
     """
     print(banner)
 
@@ -602,12 +747,11 @@ def main_tareas():
 # YT
 def banner_yt():
     print("""
-      _____  _    _  ____  _  _____ _     _     
-     |  __ \| |  | |/ __ \| |/ ____| |   | |    
-     | |__) | |  | | |  | | | |    | |   | |    
-     |  ___/| |  | | |  | | | |    | |   | |    
-     | |    | |__| | |__| | | |____| |___| |____
-     |_|     \____/ \____/|_|\_____|______|______|
+     oooooooo8   ooooooo   oooo   oooo ooooo  oooo ooooooooooo oooooooooo  ooooooooooo ooooooooooo oooooooooo  
+    o888     88 o888   888o  8888o  88   888    88   888    88   888    888 88  888  88  888    88   888    888 
+    888         888     888  88 888o88    888  88    888ooo8     888oooo88      888      888ooo8     888oooo88  
+    888o     oo 888o   o888  88   8888     88888     888    oo   888  88o       888      888    oo   888  88o   
+     888oooo88    88ooo88   o88o    88      888     o888ooo8888 o888o  88o8    o888o    o888ooo8888 o888o  88o8                                                                                                   
     """)
     print(f"{Fore.MAGENTA}Bienvenido a la herramienta de YT_to_MP4{Style.RESET_ALL}")
 
@@ -741,7 +885,8 @@ def main():
                 6: main_qr, #programa gen QR
                 7: main_monitor, #monitor xarxa
                 8: main_buscFile, #busc extencio d'arxiu
-                9: salir, #sortir
+                9: main_update, #actualitzar
+                10: salir, #sortir
             }
 
             if opcio in options:
