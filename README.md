@@ -1,4 +1,4 @@
-<h1 align="center">Directory X-RAY</h1>
+<h1 align="center">Shadowbyte</h1>
 
 <p align="center">
   <img src="https://github.com/Gerijacki.png" width="100" alt="Logo"/><br/>
