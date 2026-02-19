@@ -1,10 +1,13 @@
 """
 Media utilities module.
 """
+import os
+
 import qrcode
 import yt_dlp
-import os
-from shadowbyte.utils.display import print_error, print_success, print_info
+
+from shadowbyte.utils.display import print_error, print_info, print_success
+
 
 def generate_qr_code(data: str, filename: str = "qrcode.png"):
     """Generates a QR code."""
@@ -30,7 +33,7 @@ def download_video(url: str, output_path: str = "."):
         'outtmpl': os.path.join(output_path, '%(title)s.%(ext)s'),
         'format': 'best',
     }
-    
+
     print_info(f"Downloading video from {url}...")
     try:
         with yt_dlp.YoutubeDL(ydl_opts) as ydl:

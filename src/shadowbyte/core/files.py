@@ -1,10 +1,13 @@
 """
 File management and encryption utilities.
 """
-import os
 import hashlib
+import os
+
 from cryptography.fernet import Fernet
-from shadowbyte.utils.display import print_error, print_success, print_info
+
+from shadowbyte.utils.display import print_error, print_success
+
 
 def compare_directories(dir1: str, dir2: str):
     """Compares two directories."""
@@ -68,11 +71,11 @@ def decrypt_file(filename: str, key: bytes):
         with open(filename, "rb") as file:
             encrypted_data = file.read()
         decrypted_data = f.decrypt(encrypted_data)
-        
+
         output_file = filename.replace(".enc", "")
         if output_file == filename:
             output_file += ".dec"
-            
+
         with open(output_file, "wb") as file:
             file.write(decrypted_data)
         print_success(f"File decrypted: {output_file}")
@@ -100,7 +103,7 @@ def calculate_hash(filename: str, algorithm: str = "sha256") -> str:
             # Read in chunks to handle large files
             for chunk in iter(lambda: f.read(4096), b""):
                 hasher.update(chunk)
-        
+
         return hasher.hexdigest()
     except Exception as e:
         print_error(f"Error calculating hash: {e}")

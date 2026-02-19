@@ -3,9 +3,11 @@ Task management module using JSON.
 """
 import json
 import os
-from typing import List, Dict
-from shadowbyte.utils.display import print_error, print_success, console
+from typing import Dict, List
+
 from rich.table import Table
+
+from shadowbyte.utils.display import console, print_error, print_success
 
 TASKS_FILE = "tasks.json"
 
@@ -53,7 +55,7 @@ def list_tasks(show_completed: bool = False):
     for task in tasks:
         if not show_completed and task["status"] == "completed":
             continue
-            
+
         status_color = "green" if task["status"] == "completed" else "red"
         table.add_row(
             str(task["id"]),

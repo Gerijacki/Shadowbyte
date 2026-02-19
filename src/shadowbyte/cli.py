@@ -1,14 +1,16 @@
 """
 Main CLI entry point for Shadowbyte.
 """
-import typer
 import os
 from typing import Optional
-from shadowbyte.utils.display import print_banner, console
-from shadowbyte.core import system, network, files, security, media, tasks
-from shadowbyte import config
-from rich.table import Table
+
+import typer
 from rich.panel import Panel
+from rich.table import Table
+
+from shadowbyte import config
+from shadowbyte.core import files, media, network, security, system, tasks
+from shadowbyte.utils.display import console
 
 app = typer.Typer(
     name="shadowbyte",
@@ -28,7 +30,7 @@ def tasks_list_cmd(all: bool = typer.Option(False, help="Show completed tasks"))
 
 @tasks_app.command("add")
 def tasks_add_cmd(
-    title: str, 
+    title: str,
     desc: str = typer.Option("", help="Task description"),
     priority: int = typer.Option(1, help="Priority (1-5)")
 ):
@@ -85,7 +87,7 @@ def security_config_cmd(
 ):
     """View or update configuration."""
     current_config = config.load_config()
-    
+
     if key and value:
         current_config[key] = value
         config.save_config(current_config)
@@ -124,7 +126,7 @@ def files_encrypt_cmd(file: str, key_file: str = "secret.key"):
             files.save_key(key, key_file)
         else:
             return
-    
+
     key = files.load_key(key_file)
     files.encrypt_file(file, key)
 
@@ -134,7 +136,7 @@ def files_decrypt_cmd(file: str, key_file: str = "secret.key"):
     if not os.path.exists(key_file):
         console.print("[red]Key file not found![/red]")
         return
-        
+
     key = files.load_key(key_file)
     files.decrypt_file(file, key)
 
@@ -154,10 +156,10 @@ def network_info_cmd():
     """Show network interface information."""
     info = network.get_network_info()
     public_ip = network.get_public_ip()
-    
+
     console.print(f"[bold]Host:[/bold] {info['Host Name']} ({info['Host IP']})")
     console.print(f"[bold]Public IP:[/bold] {public_ip}")
-    
+
     for iface, details in info["Interfaces"].items():
         console.print(Panel.fit(
             f"IP: {details['IP']}\nNetmask: {details['Netmask']}\nBroadcast: {details['Broadcast']}",
@@ -182,28 +184,28 @@ def network_speedtest_cmd():
 def network_scan_cmd(range: str = typer.Option("192.168.1.1/24", help="IP range to scan")):
     """Scan local network for devices (Requires Root)."""
     devices = network.scan_network_arp(range)
-    
+
     if devices:
         table = Table(title=f"Network Scan: {range}")
         table.add_column("IP Address", style="green")
         table.add_column("MAC Address", style="magenta")
-        
+
         for device in devices:
             table.add_row(device['ip'], device['mac'])
-        
+
         console.print(table)
     else:
         console.print("[yellow]No devices found or permission denied.[/yellow]")
 
 @network_app.command("port-scan")
 def network_portscan_cmd(
-    target: str, 
+    target: str,
     ports: str = typer.Option("21,22,80,443,3306,8080", help="Comma-separated list of ports")
 ):
     """Scan for open ports on a target."""
     port_list = [int(p.strip()) for p in ports.split(",")]
     open_ports = network.scan_ports(target, port_list)
-    
+
     if open_ports:
         console.print(Panel.fit(
             "\n".join([f"[green]Port {p} OPEN[/green]" for p in open_ports]),
@@ -234,7 +236,7 @@ def system_info_cmd():
     """Show system information."""
     info = system.get_system_info()
     disk = system.get_disk_info()
-    
+
     console.print(Panel.fit(
         "\n".join([f"[bold]{k}:[/bold] {v}" for k, v in info.items()]),
         title="System Info",
@@ -277,7 +279,7 @@ def main(
         from shadowbyte import __version__
         console.print(f"[bold cyan]Shadowbyte[/bold cyan] version [bold green]{__version__}[/bold green]")
         raise typer.Exit()
-    
+
     # If no command is provided, show banner and help
     # print_banner() # Clean but maybe too noisy for every command? Let's keep it for interactive if needed.
 

@@ -1,20 +1,20 @@
 """
 System information and monitoring module.
 """
-import platform
-import psutil
-import cpuinfo
-import time
 import os
+import platform
 import shutil
 import subprocess
 import tempfile
+import time
+
+import cpuinfo
+import psutil
 from rich.live import Live
 from rich.table import Table
-from rich.panel import Panel
-from rich.layout import Layout
-from rich.console import Console
-from shadowbyte.utils.display import console, print_error, print_success, print_info
+
+from shadowbyte.utils.display import console, print_error, print_info, print_success
+
 
 def get_system_info():
     """Returns a dictionary with system information."""
@@ -51,7 +51,7 @@ def get_disk_info():
 def clean_temp_files():
     """Cleans temporary files."""
     temp_dir = tempfile.gettempdir()
-    
+
     print_info(f"Cleaning temporary files in {temp_dir}...")
     file_count = 0
     error_count = 0
@@ -79,7 +79,7 @@ def update_system():
     """Updates the system packages."""
     system = platform.system().lower()
     commands = []
-    
+
     if system == "linux":
         # Check for apt
         if shutil.which("apt"):

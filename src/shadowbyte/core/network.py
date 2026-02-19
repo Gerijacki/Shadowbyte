@@ -1,13 +1,16 @@
 """
 Network utilities and scanner module.
 """
-import socket
-import psutil
-import speedtest
-import requests
 import concurrent.futures
+import socket
+
+import psutil
+import requests
+import speedtest
 from scapy.all import ARP, Ether, srp
-from shadowbyte.utils.display import console, print_error, print_success, print_info
+
+from shadowbyte.utils.display import print_error, print_info
+
 
 def get_network_info():
     """Returns network interface information."""
@@ -16,7 +19,7 @@ def get_network_info():
     host_ip = socket.gethostbyname(host_name)
     info["Host Name"] = host_name
     info["Host IP"] = host_ip
-    
+
     interfaces = psutil.net_if_addrs()
     iface_details = {}
     for iface, addrs in interfaces.items():
@@ -36,15 +39,15 @@ def run_speedtest():
     try:
         st = speedtest.Speedtest()
         st.get_best_server()
-        
+
         print_info("Testing download speed...")
         download = st.download() / 1_000_000  # Convert to Mbps
-        
+
         print_info("Testing upload speed...")
         upload = st.upload() / 1_000_000  # Convert to Mbps
-        
+
         ping = st.results.ping
-        
+
         return {
             "Download": f"{download:.2f} Mbps",
             "Upload": f"{upload:.2f} Mbps",
@@ -57,20 +60,20 @@ def run_speedtest():
 def scan_network_arp(ip_range: str = "192.168.1.1/24"):
     """Scans the local network using ARP requests."""
     print_info(f"Scanning network range: {ip_range}...")
-    
+
     try:
         # Create ARP request
         arp = ARP(pdst=ip_range)
         ether = Ether(dst="ff:ff:ff:ff:ff:ff")
         packet = ether/arp
-        
+
         # Send packet and receive response
         result = srp(packet, timeout=3, verbose=0)[0]
-        
+
         devices = []
         for sent, received in result:
             devices.append({'ip': received.psrc, 'mac': received.hwsrc})
-            
+
         return devices
     except PermissionError:
         print_error("Permission denied. Network scanning requires root/admin privileges.")
@@ -109,7 +112,7 @@ def scan_port(ip, port):
             result = s.connect_ex((ip, port))
             if result == 0:
                 return port
-    except:
+    except Exception:
         pass
     return None
 
@@ -117,7 +120,7 @@ def scan_ports(target: str, ports: list[int]):
     """Scans a list of ports on a target IP."""
     print_info(f"Scanning ports on {target}...")
     open_ports = []
-    
+
     # Resolve domain if needed
     try:
         target_ip = socket.gethostbyname(target)
@@ -134,5 +137,5 @@ def scan_ports(target: str, ports: list[int]):
                     open_ports.append(port)
             except Exception:
                 pass
-                
+
     return sorted(open_ports)

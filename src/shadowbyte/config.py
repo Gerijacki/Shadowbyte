@@ -18,7 +18,7 @@ def load_config() -> dict:
     """Loads configuration from file."""
     if not os.path.exists(CONFIG_FILE):
         return DEFAULT_CONFIG
-    
+
     try:
         with open(CONFIG_FILE, "r") as f:
             config = json.load(f)
