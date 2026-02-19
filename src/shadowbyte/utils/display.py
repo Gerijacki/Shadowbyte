@@ -7,7 +7,7 @@ from rich.text import Text
 
 console = Console()
 
-def print_banner():
+def print_banner() -> None:
     """Prints the Shadowbyte banner."""
     banner_text = """
     ███████╗██╗  ██╗ █████╗ ██████╗  ██████╗ ██╗    ██╗██████╗ ██╗   ██╗████████╗███████╗
@@ -24,18 +24,18 @@ def print_banner():
     )
     console.print(panel)
 
-def print_error(message: str):
+def print_error(message: str) -> None:
     """Prints an error message."""
     console.print(f"[bold red]Error:[/bold red] {message}")
 
-def print_success(message: str):
+def print_success(message: str) -> None:
     """Prints a success message."""
     console.print(f"[bold green]Success:[/bold green] {message}")
 
-def print_warning(message: str):
+def print_warning(message: str) -> None:
     """Prints a warning message."""
     console.print(f"[bold yellow]Warning:[/bold yellow] {message}")
 
-def print_info(message: str):
+def print_info(message: str) -> None:
     """Prints an info message."""
     console.print(f"[bold blue]Info:[/bold blue] {message}")

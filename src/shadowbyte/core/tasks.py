@@ -3,7 +3,7 @@ Task management module using JSON.
 """
 import json
 import os
-from typing import Dict, List
+from typing import Any, Dict, List, cast
 
 from rich.table import Table
 
@@ -11,17 +11,17 @@ from shadowbyte.utils.display import console, print_error, print_success
 
 TASKS_FILE = "tasks.json"
 
-def load_tasks() -> List[Dict]:
+def load_tasks() -> List[Dict[str, Any]]:
     """Loads tasks from file."""
     if not os.path.exists(TASKS_FILE):
         return []
     try:
         with open(TASKS_FILE, "r") as f:
-            return json.load(f)
+            return cast(List[Dict[str, Any]], json.load(f))
     except Exception:
         return []
 
-def save_tasks(tasks: List[Dict]):
+def save_tasks(tasks: List[Dict[str, Any]]) -> None:
     """Saves tasks to file."""
     try:
         with open(TASKS_FILE, "w") as f:
@@ -29,7 +29,7 @@ def save_tasks(tasks: List[Dict]):
     except Exception as e:
         print_error(f"Error saving tasks: {e}")
 
-def add_task(title: str, description: str = "", priority: int = 1):
+def add_task(title: str, description: str = "", priority: int = 1) -> None:
     """Adds a new task."""
     tasks = load_tasks()
     tasks.append({
@@ -42,7 +42,7 @@ def add_task(title: str, description: str = "", priority: int = 1):
     save_tasks(tasks)
     print_success(f"Task '{title}' added.")
 
-def list_tasks(show_completed: bool = False):
+def list_tasks(show_completed: bool = False) -> None:
     """Lists all tasks."""
     tasks = load_tasks()
     table = Table(title="Shadowbyte Task Manager")
@@ -66,7 +66,7 @@ def list_tasks(show_completed: bool = False):
         )
     console.print(table)
 
-def complete_task(task_id: int):
+def complete_task(task_id: int) -> None:
     """Marks a task as completed."""
     tasks = load_tasks()
     for task in tasks:
@@ -77,7 +77,7 @@ def complete_task(task_id: int):
             return
     print_error(f"Task {task_id} not found.")
 
-def remove_task(task_id: int):
+def remove_task(task_id: int) -> None:
     """Removes a task."""
     tasks = load_tasks()
     tasks = [t for t in tasks if t["id"] != task_id]

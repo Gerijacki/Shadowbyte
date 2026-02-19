@@ -14,7 +14,7 @@ DEFAULT_CONFIG = {
     "theme": "default"
 }
 
-def load_config() -> dict:
+def load_config() -> dict[str, Any]:
     """Loads configuration from file."""
     if not os.path.exists(CONFIG_FILE):
         return DEFAULT_CONFIG
@@ -27,7 +27,7 @@ def load_config() -> dict:
     except Exception:
         return DEFAULT_CONFIG
 
-def save_config(config: dict):
+def save_config(config: dict[str, Any]) -> None:
     """Saves configuration to file."""
     try:
         with open(CONFIG_FILE, "w") as f:

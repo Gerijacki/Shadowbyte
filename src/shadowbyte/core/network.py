@@ -3,18 +3,19 @@ Network utilities and scanner module.
 """
 import concurrent.futures
 import socket
+from typing import Any, Dict, List, Optional
 
 import psutil
 import requests
 import speedtest
-from scapy.all import ARP, Ether, srp
+from scapy.all import ARP, Ether, srp  # type: ignore
 
 from shadowbyte.utils.display import print_error, print_info
 
 
-def get_network_info():
+def get_network_info() -> Dict[str, Any]:
     """Returns network interface information."""
-    info = {}
+    info: Dict[str, Any] = {}
     host_name = socket.gethostname()
     host_ip = socket.gethostbyname(host_name)
     info["Host Name"] = host_name
@@ -33,7 +34,7 @@ def get_network_info():
     info["Interfaces"] = iface_details
     return info
 
-def run_speedtest():
+def run_speedtest() -> Optional[Dict[str, str]]:
     """Runs a internet speed test."""
     print_info("Running speed test... (this may take a while)")
     try:
@@ -57,7 +58,7 @@ def run_speedtest():
         print_error(f"Speed test failed: {e}")
         return None
 
-def scan_network_arp(ip_range: str = "192.168.1.1/24"):
+def scan_network_arp(ip_range: str = "192.168.1.1/24") -> List[Dict[str, str]]:
     """Scans the local network using ARP requests."""
     print_info(f"Scanning network range: {ip_range}...")
 
@@ -82,15 +83,15 @@ def scan_network_arp(ip_range: str = "192.168.1.1/24"):
         print_error(f"Scan failed: {e}")
         return []
 
-def get_public_ip():
+def get_public_ip() -> str:
     """Gets the public IP address."""
     try:
         response = requests.get('https://api.ipify.org?format=json')
-        return response.json()['ip']
+        return str(response.json()['ip'])
     except Exception:
         return "Unknown"
 
-def dns_lookup(domain: str):
+def dns_lookup(domain: str) -> Optional[Dict[str, str]]:
     """Resolves a domain name to an IP address."""
     try:
         ip = socket.gethostbyname(domain)
@@ -104,7 +105,7 @@ def dns_lookup(domain: str):
         print_error(f"Could not resolve domain: {domain}")
         return None
 
-def scan_port(ip, port):
+def scan_port(ip: str, port: int) -> Optional[int]:
     """Scans a single port."""
     try:
         with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
@@ -116,7 +117,7 @@ def scan_port(ip, port):
         pass
     return None
 
-def scan_ports(target: str, ports: list[int]):
+def scan_ports(target: str, ports: List[int]) -> List[int]:
     """Scans a list of ports on a target IP."""
     print_info(f"Scanning ports on {target}...")
     open_ports = []

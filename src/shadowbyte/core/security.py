@@ -21,7 +21,7 @@ def generate_password(length: int = 12, use_upper: bool = True, use_symbols: boo
 
     return ''.join(random.choice(chars) for _ in range(length))
 
-def scan_file_virustotal(filepath: str):
+def scan_file_virustotal(filepath: str) -> None:
     """Scans a file using VirusTotal API."""
     api_key = get_setting("virustotal_api_key")
     if not api_key:

@@ -3,13 +3,14 @@ File management and encryption utilities.
 """
 import hashlib
 import os
+from typing import List, Optional
 
 from cryptography.fernet import Fernet
 
 from shadowbyte.utils.display import print_error, print_success
 
 
-def compare_directories(dir1: str, dir2: str):
+def compare_directories(dir1: str, dir2: str) -> Optional[dict[str, List[str]]]:
     """Compares two directories."""
     if not os.path.exists(dir1) or not os.path.exists(dir2):
         print_error("One or both directories do not exist.")
@@ -37,11 +38,11 @@ def compare_file_content(file1: str, file2: str) -> bool:
         print_error(f"Error comparing files: {e}")
         return False
 
-def generate_key():
+def generate_key() -> bytes:
     """Generates a key for encryption."""
     return Fernet.generate_key()
 
-def save_key(key: bytes, filename: str = "secret.key"):
+def save_key(key: bytes, filename: str = "secret.key") -> None:
     """Saves the key to a file."""
     with open(filename, "wb") as key_file:
         key_file.write(key)
@@ -51,7 +52,7 @@ def load_key(filename: str = "secret.key") -> bytes:
     """Loads the key from a file."""
     return open(filename, "rb").read()
 
-def encrypt_file(filename: str, key: bytes):
+def encrypt_file(filename: str, key: bytes) -> None:
     """Encrypts a file."""
     f = Fernet(key)
     try:
@@ -64,7 +65,7 @@ def encrypt_file(filename: str, key: bytes):
     except Exception as e:
         print_error(f"Encryption failed: {e}")
 
-def decrypt_file(filename: str, key: bytes):
+def decrypt_file(filename: str, key: bytes) -> None:
     """Decrypts a file."""
     f = Fernet(key)
     try:

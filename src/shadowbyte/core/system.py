@@ -7,6 +7,7 @@ import shutil
 import subprocess
 import tempfile
 import time
+from typing import Any
 
 import cpuinfo
 import psutil
@@ -16,7 +17,7 @@ from rich.table import Table
 from shadowbyte.utils.display import console, print_error, print_info, print_success
 
 
-def get_system_info():
+def get_system_info() -> dict[str, Any]:
     """Returns a dictionary with system information."""
     info = {
         "OS": f"{platform.system()} {platform.release()}",
@@ -34,7 +35,7 @@ def get_system_info():
         info["CPU Model"] = "Unknown"
     return info
 
-def get_disk_info():
+def get_disk_info() -> dict[str, str]:
     """Returns disk usage information."""
     try:
         usage = psutil.disk_usage('/')
@@ -48,7 +49,7 @@ def get_disk_info():
         print_error(f"Error getting disk info: {e}")
         return {}
 
-def clean_temp_files():
+def clean_temp_files() -> None:
     """Cleans temporary files."""
     temp_dir = tempfile.gettempdir()
 
@@ -75,7 +76,7 @@ def clean_temp_files():
     except Exception as e:
         print_error(f"Failed to clean temp files: {e}")
 
-def update_system():
+def update_system() -> None:
     """Updates the system packages."""
     system = platform.system().lower()
     commands = []
@@ -136,7 +137,7 @@ def generate_dashboard_table() -> Table:
 
     return table
 
-def run_monitor():
+def run_monitor() -> None:
     """Runs the real-time system monitor."""
     print_info("Starting System Monitor (Press Ctrl+C to stop)...")
     try:
