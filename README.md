@@ -1,82 +1,124 @@
-<h1 align="center">Shadowbyte</h1>
+# Shadowbyte
 
-<p align="center">
-  <img src="https://github.com/Gerijacki.png" width="100" alt="Logo"/><br/>
-  Hi 👋, I'm <a href="https://github.com/Gerijacki">Gerijacki</a>
-</p>
+![Version](https://img.shields.io/badge/version-2.0.0-blue)
+![License](https://img.shields.io/badge/license-MIT-green)
+![Python](https://img.shields.io/badge/python-3.9+-yellow)
 
-<p align="center">
-  <a href="https://github.com/Gerijacki/Shadowbyte/stargazers"><img src="https://img.shields.io/github/stars/Gerijacki/Shadowbyte?colorA=363a4f&colorB=b7bdf8&style=for-the-badge"></a>
-  <a href="https://github.com/Gerijacki/Shadowbyte/issues"><img src="https://img.shields.io/github/issues/Gerijacki/Shadowbyte?colorA=363a4f&colorB=f5a97f&style=for-the-badge"></a>
-  <a href="https://github.com/Gerijacki/Shadowbyte/contributors"><img src="https://img.shields.io/github/contributors/Gerijacki/Shadowbyte?colorA=363a4f&colorB=a6da95&style=for-the-badge"></a>
-</p>
+**Shadowbyte** es un kit de herramientas profesional para administradores de sistemas, entusiastas de redes y desarrolladores. Diseñado para ser modular, rápido y fácil de usar desde la línea de comandos.
 
-## Overview
+## 🚀 Características
 
-Welcome to shadowbyte!
+- **🖥️ Sistema**: Monitorización en tiempo real (CPU, RAM, Disco), limpieza de temporales, actualizaciones del sistema.
+- **🌐 Red**: Test de velocidad, escáner de red local (LAN), información de interfaces y IP pública.
+- **🔐 Seguridad**: Generador de contraseñas seguras, escáner de archivos con VirusTotal.
+- **📁 Archivos**: Comparación de directorios, **encriptación/desencriptación AES**.
+- **🎥 Media**: Descarga de videos de YouTube (yt-dlp), generador de códigos QR.
+- **✅ Tareas**: Gestor de tareas ligero integrado.
 
-Shadowbyte is a versatile Python-based command-line application designed to provide users with a set of useful tools for system information, directory comparison, task management, YouTube video downloading, password generation, QR code creation, real-time network consumption monitoring, and file searching within the system.
+## 📦 Instalación
 
+### Opción 1: Instalación Local (Python)
 
-## How to Use
+Recomendado si quieres usarlo como herramienta diaria en tu sistema.
 
-1. **Installation**
+```bash
+# Clonar el repositorio
+git clone https://github.com/gerijacki/shadowbyte.git
+cd shadowbyte
 
-   Make sure you have Python installed. If not, download and install it from [python.org](https://www.python.org/).
+# Crear entorno virtual (opcional pero recomendado)
+python3 -m venv venv
+source venv/bin/activate
 
-    You can install the application using the following methods:
+# Instalar
+pip install .
+```
 
-    - **From GitHub Releases:**
-      1. Go to the [Releases](https://github.com/Gerijacki/Shadowbyte/releases) page.
-      2. Download the latest release for your operating system.
-      3. Extract the downloaded ZIP file.
-      4. Run the `shadowbyte` file.
+### Opción 2: Docker 🐳
 
-    - **From Source:**
-      1. Clone the repository:
-      ```
-      git clone https://github.com/Gerijacki/Shadowbyte.git
-      ```
-      2. Launch the app:
-      ```
-      python gerijacki.py
-      ```
+Ideal para probar la herramienta sin instalar dependencias en tu sistema.
 
-2. **Features**
-   - **Simplicity:** Easy-to-use interface
-   - **Efficiency:** Swiftly perform various tasks.
-   - **Dependency-free:** No external dependencies, ensuring a lightweight experience.
+```bash
+# Construir la imagen
+docker build -t shadowbyte .
 
-3. **Functionality Overview**
+# Ejecutar (Ejemplo para ver la ayuda)
+docker run --rm shadowbyte --help
 
-    - **Info (Informacion del sistema):** Provides essential information about the system, including operating system details, architecture, processor, and memory information.
+# Ejecutar Monitor de Sistema (requiere flags especiales para acceder al host)
+docker run --rm -it --pid=host shadowbyte system monitor
+```
 
-    - **Direct-X (Comparador de directorios):** Allows users to compare files between two directories. It provides a list of common files and different files between the specified directories.
+## 🛠️ Uso
 
-    - **Task (Gestor de tareas):** Manages tasks and processes. Users can view and interact with the running processes, terminate tasks, and monitor system resource usage.
+Shadowbyte utiliza una estructura de comandos intuitiva: `shadowbyte [CATEGORIA] [COMANDO]`
 
-    - **YT-MP4 (Descargar videos de youtube):** Downloads videos from YouTube in MP4 format. Users can input the video URL, and the application fetches and saves the video locally.
+### Comandos Principales
 
-    - **PASSWD (Generador de contraseñas):** Generates strong and secure passwords. Users can customize the length and complexity of the password.
+#### Sistema
 
-    - **Generador QR (Generador de codigos QR):** Creates QR codes for various types of data, such as URLs, text, or contact information. Users can easily generate QR codes for their needs.
+```bash
+# Ver información del sistema
+shadowbyte system info
 
-    - **Monitor consumo (Monitor del consumo de red a tiempo real):** Monitors real-time network consumption, providing information on upload and download speeds. Useful for tracking network usage over time.
+# Monitor en tiempo real (CPU/RAM/Red)
+shadowbyte system monitor
 
-    - **Buscador Archivos (Buscar archivos en el sistema):** Searches for files within the system based on user-defined criteria. It helps users locate files efficiently.
+# Limpiar archivos temporales
+shadowbyte system clean
+```
 
-4. **Disclaimer**
+#### Red
 
-Please respect copyright policies when using this tool. This project is intended for educational and personal use only. The developers are not responsible for any misuse of the software.
+```bash
+# Escanear red local (requiere permisos de administrador/root)
+sudo shadowbyte network scan --range 192.168.1.1/24
+
+# Test de velocidad de internet
+shadowbyte network speedtest
+```
+
+#### Seguridad y Archivos
+
+```bash
+# Generar contraseña segura de 20 caracteres
+shadowbyte security password --length 20
+
+# Encriptar un archivo (genera 'secret.key' si no existe)
+shadowbyte files encrypt mis_secretos.txt
+
+# Desencriptar
+shadowbyte files decrypt mis_secretos.txt.enc
+```
+
+#### Media
+
+```bash
+# Descargar video de YouTube
+shadowbyte media yt "https://youtube.com/watch?v=..."
+
+# Generar código QR
+shadowbyte media qr "https://github.com/gerijacki" --output mi_qr.png
+```
+
+## ⚙️ Configuración
+
+Algunas funciones (como VirusTotal) requieren configuración.
+
+```bash
+# Ver configuración actual
+shadowbyte security config
+
+# Configurar API Key de VirusTotal
+shadowbyte security config --key virustotal_api_key --value "TU_API_KEY"
+```
+
+Los datos se guardan en `config.json`.
+
+## 📄 Licencia
+
+Este proyecto está bajo la Licencia [MIT](LICENSE).
 
 ---
 
-<p align="center">
-  <a href="https://github.com/Gerijacki">
-    <img src="https://github-readme-stats.vercel.app/api?username=Gerijacki&show_icons=true&theme=dark&count_private=true" alt="GitHub Stats" />
-  </a>
-</p>
-
-<p align="center">
-  <img src="https://raw.githubusercontent.com/Trilokia/Trilokia/379277808c61ef204768a61bbc5d25bc7798ccf1/bottom_header.svg" />
-</p>
+Creado por **Gerijacki**.
