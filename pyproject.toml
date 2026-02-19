@@ -25,6 +25,16 @@ dependencies = [
     "py-cpuinfo>=9.0.0",
 ]
 
+[project.optional-dependencies]
+dev = [
+    "types-requests",
+    "types-psutil",
+    "types-setuptools",
+    "mypy",
+    "ruff",
+    "pytest",
+]
+
 [project.scripts]
 shadowbyte = "shadowbyte.cli:app"
 
